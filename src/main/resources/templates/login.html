@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>账号登陆</title>
+
+
+		<!-- bootstrap -->
+		<link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+		<!-- 自定义登录css -->
+		<link rel="stylesheet" type="text/css" th:href="@{/css/signin.css}"/>
+
+	</head>
+
+	<body class="text-center">
+		<form class="form-signin"  id="loginForm" name="loginForm">
+			<h1 class="h3 mb-3 font-weight-normal" style="color: #1f8dda">账号登录</h1>
+			<p id="msg" style="color: #ff0000;"></p>
+			<input type="text" name="sno" id="sno" class="form-control" placeholder="请输入账号" style="margin-top: 30px;">
+			<input type="password" name="password" id="password" class="form-control" placeholder="请输入密码" style="margin-top: 30px;">
+			<div id="verify-code-img" class="form-inline" style="margin-top: 30px;margin-bottom: 10px;">
+				<span class="verify-code" style="height: 40px;width: 150px; line-height: 40px; font-size: 30px;"></span>
+				<input type="text" id="yzm" name="yzm" class="verify-code-input form-control" style="width: 140px;float: right;" placeholder="请输入验证码">
+			</div>
+
+			<button class="btn btn-lg btn-primary btn-block" id="login" type="submit" style="margin-top: 30px;margin-bottom: 30px;">登录</button>
+			<p class="mt-5 mb-3 text-muted">
+				官方网站：<a href="https://www.hdu.edu.cn/">HDU</a>
+			</p>
+
+		</form>
+
+
+		<!-- 页面结束 -->
+		<!-- javascript begin -->
+
+		<!-- jquery -->
+		<script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+		<!-- bootstrap -->
+		<script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+		<!-- jquery-validator -->
+		<script type="text/javascript" th:src="@{/jquery-validation/jquery.validate.min.js}"></script>
+		<script type="text/javascript" th:src="@{/jquery-validation/localization/messages_zh.min.js}"></script>
+		<!-- md5.js -->
+		<script type="text/javascript" th:src="@{/js/md5.min.js}"></script>
+		<!-- layer.js 弹窗 -->
+		<script type="text/javascript" th:src="@{/layer/layer.js}"></script>
+		<!-- common.js -->
+		<script type="text/javascript" th:src="@{/js/common.js}"></script>
+		<!-- 自定义js -->
+		<script>
+
+			//登录验证 验证码验证 通过后再发请求到后台
+			$('#verify-code-img').codeVerify({
+				figure : 10,	//位数
+				btnId : 'login',
+				ready : function() {
+				},
+				success : function() {
+					console.log("doLogin")
+					doLogin()
+				},
+				error : function() {
+					$('#msg').text("验证码错误")
+					// 因为是验证码的回调函数，所以点击登录按钮验证失败过后表单会自动再提交一次
+					// 监听表单提交并组织
+					$('#loginForm').submit(function(e) {
+						return false;//阻止表单提交
+					})
+					updateVerifyCode()
+				}
+			});
+
+			function doLogin(){
+				// 表单提交
+				$("#loginForm").validate({
+					submitHandler: function (form) {
+						verify();
+					}
+				});
+
+			}
+
+			function verify(){
+				// 加载动画
+				g_showLoading();
+				// md5盐值加密
+				let inputPass = $("#password").val();
+				let salt = g_passsword_salt;
+				let str = "" + salt.charAt(0) + salt.charAt(2) + inputPass + salt.charAt(5) + salt.charAt(4);
+				// let password = md5(str);
+				let password = inputPass; //跳过md5验证
+				// 异步请求
+				$.ajax({
+					url: "/do/login",
+					type: "POST",
+					data: {
+						sno: $("#sno").val(),
+						password: password
+					},
+					// contentType:"application/json",
+					success: function (data) {
+						if (data === "success") {
+							window.location.href = "/index";
+						} else {
+							layer.closeAll();
+							$("#msg").text(data.msg);
+							updateVerifyCode()
+						}
+					},
+					error: function () {
+						// 这里有一个Bug：当发送一次请求，失败或返回的参数不符合要求时，再次点击登录按钮将不再检查验证码
+						// 以个人能力暂时无法解决
+						layer.closeAll();
+						$("#msg").text("服务器异常，请稍后再试...");
+						$("#yzm").val('');
+					}
+				});
+			}
+
+		</script>
+
+	</body>
+
+</html>
