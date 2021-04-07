@@ -1,10 +1,9 @@
 package com.yhh.xuanke.repository;
 
-import com.yhh.xuanke.entiy.UserEntity;
+import com.yhh.xuanke.entiy.StudentEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<UserEntity,Integer> {
-
+public interface StudentRepository extends JpaRepository<StudentEntity,Integer> {
 }

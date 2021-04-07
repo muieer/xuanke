@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common::common_header(~{::title},~{})">
+
+  <title>学生选课情况查询</title>
+
+
+</head>
+  
+<body>
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <div th:replace="~{common/common::sidebar(first='info',second='result')}"></div>
+    <!--End 左侧导航-->
+    
+    <!--头部信息-->
+    <div th:replace="~{common/common::topbar}"></div>
+    <!--End 头部信息-->
+    
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+      
+      <div class="container-fluid">
+        
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header">
+                <h3>选课情况查询</h3>
+                <div class="pull-right">
+                  <button class="btn btn-label btn-w-lg btn-primary" id="noChoose" >
+                    <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认退课
+                  </button>
+                </div>
+              </div>
+
+              <div class="card-body">
+
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    <!-- 表头 -->
+                    <thead>
+                    <tr>
+                      <th scope="col">序号</th>
+                      <th scope="col">课程号</th>
+                      <th scope="col">课程名</th>
+                      <th scope="col">教师<th>
+                      <th scope="col">学分</th>
+                      <th scope="col">学时</th>
+                      <th scope="col">上课时间</th>
+                      <th scope="col">上课地点</th>
+                      <th scope="col">课程性质</th>
+                      <th scope="col">开课学院</th>
+                      <th scope="col">退选</th>
+                    </tr>
+                    </thead>
+                    <!-- 表格内容 -->
+                    <tbody id="tbody">
+                    <tr th:each="result:${rList}">
+                      <th scope="row" th:text="${resultStat.index+1}"></th>
+                      <td th:text="${result.planEntity.cno}"></td>
+                      <td th:text="${result.planEntity.cname}"></td>
+                      <td th:text="${result.planEntity.cteacher}"></td>
+                      <td th:text="${result.planEntity.credit}"></td>
+                      <td th:text="${result.planEntity.xueshi}"></td>
+                      <td th:text="${result.planEntity.studytime}"></td>
+                      <td th:text="${result.planEntity.studylocation}"></td>
+                      <td th:text="${result.planEntity.cnature}"></td>
+                      <td th:text="${result.planEntity.college}"></td>
+                      <td><input type="checkbox" name="noChoose" th:value="${result.rno}"></td>
+                    </tr>
+                    </tbody>
+
+                  </table>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+        
+      </div>
+
+    </main>
+    <!--End 页面主要内容-->
+  </div>
+</div>
+<div th:replace="common/common::common_js(~{::script})">
+  <script>
+
+    function getRno() {
+      var rno = "";
+      $.each($('input:checkbox:checked'), function (){
+        rno = $(this).val();
+        return false;
+      });
+      return rno;
+    }
+
+    $('#noChoose').click(function () {
+      $.ajax({
+        url: "/result/noChoose",
+        type: "POST",
+        data: {
+          rno: getRno(),
+        },
+        success: function (data) {
+          if(data==1){
+            alert("退选成功！");
+            //重新加载页面
+            location.reload();
+          }
+        },
+        error: function () {
+          alert("执行错误");
+        }
+      });
+
+    });
+  </script>
+</div>
+
+</body>
+</html>

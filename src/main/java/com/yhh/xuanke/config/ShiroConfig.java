@@ -29,13 +29,17 @@ public class ShiroConfig {
          */
         Map<String,String> filterMap = new LinkedHashMap<>();
         //无需权限，登录页面和登录请求无需拦截
+        //发送登陆请求
         filterMap.put("/do/login","anon");
+        //跳转到登陆页面
         filterMap.put("/home","anon");
+
         //需要登录才能进入
-        filterMap.put("/index","authc");
-        filterMap.put("/","authc");
+//        filterMap.put("/index","authc");
+        filterMap.put("/*","authc");
         bean.setFilterChainDefinitionMap(filterMap);
-        //设置登陆跳转
+
+        //没登陆前提下设置登陆跳转
         bean.setLoginUrl("/home");
         return bean;
     }

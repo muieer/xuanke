@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="common_header(title,links)">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
 
-    <title th:replace="${title}">后台管理</title>
+    <title th:replace="${title}">选课系统</title>
 
     <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/icon/materialdesign/css/materialdesignicons.min.css}" rel="stylesheet">
@@ -12,10 +13,10 @@
 
     <th:block th:replace="${links}"/>
 
-
 </head>
 
 <body>
+
 <div class="lyear-layout-web">
     <div class="lyear-layout-container">
         <!--左侧导航-->
@@ -28,17 +29,31 @@
                         <li th:class="${first}=='main'?'nav-item active':'nav-item'">
                             <a th:href="@{/index}"><i class="mdi mdi-home"></i> 首页</a>
                         </li>
-                        <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
-                            <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 教学相关</a>
+                        <li th:class="${first=='choose'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                            <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 网上选课</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">查看课表</a> </li>
-                                <li th:class="${second=='choose'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/choose'}">选&nbsp;课</a> </li>
+                                <li th:class="${second=='bixiu'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">选普通理论及实验课</a> </li>
+                                <li th:class="${second=='xuanxiu'?'active':''}"> <a th:href="@{'/choose/list'}">选通识选修课</a> </li>
+                            </ul>
+                        </li>
+                        <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                            <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息查询</a>
+                            <ul class="nav nav-subnav">
+                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生考试查询</a> </li>
+                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生成绩查询</a> </li>
+                                <li th:class="${second=='result'?'active':''}"> <a th:href="@{'/result/list'}">学生选课情况查询</a> </li>
+                            </ul>
+                        </li>
+                        <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                            <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息维护</a>
+                            <ul class="nav nav-subnav">
+                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">个人信息</a> </li>
                             </ul>
                         </li>
                     </ul>
                 </nav>
                 <div class="sidebar-footer">
-                    <p class="copyright text-center">Copyright © 2021 杭州电子科技大学计算机系杨虎虎 All Rights Reserved</p>
+                    <p class="copyright text-center">Copyright © 2021 杭州电子科技大学计算机学院 17052135-杨虎虎 All Rights Reserved</p>
                 </div>
 
             </div>
@@ -58,13 +73,15 @@
                             <span class="lyear-toggler-bar"></span>
                             <span class="lyear-toggler-bar"></span>
                         </div>
-                        <span class="navbar-page-title"> 教务网络管理系统 </span>
+                        <span class="navbar-page-title"> <h2>杭州电子科技大学在线选课系统</h2> </span>
                     </div>
 
                     <ul class="topbar-right">
                         <li class="dropdown dropdown-profile">
                             <a href="javascript:void(0)" data-toggle="dropdown">
-                                <span th:id="sno" th:text="${#session.getAttribute('sno')}">
+<!--                                改成从cookie中获取学生姓名-->
+                                <span th:id="sno" th:each="cookie :${#httpServletRequest.getCookies()}"
+                                    th:if="${cookie.getName().equals('sname')}" th:text="${cookie.getValue()}">
                                 <span></span> <span class="caret"></span></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -173,6 +190,7 @@
         <!--End 头部信息-->
 
         <!--End 页面主要内容-->
+
     </div>
 </div>
 

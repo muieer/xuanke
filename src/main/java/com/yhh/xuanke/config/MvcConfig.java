@@ -13,6 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // 添加映射器，不经过controller
         registry.addViewController("/index").setViewName("index");
+        //跳转到登陆页面
         registry.addViewController("/home").setViewName("login");
         registry.addViewController("/").setViewName("index");
     }

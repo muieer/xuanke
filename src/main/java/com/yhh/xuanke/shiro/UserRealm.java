@@ -1,7 +1,7 @@
 package com.yhh.xuanke.shiro;
 
-import com.yhh.xuanke.entiy.UserEntity;
-import com.yhh.xuanke.service.UserService;
+import com.yhh.xuanke.entiy.StudentEntity;
+import com.yhh.xuanke.service.StudentService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -16,7 +16,7 @@ public class UserRealm extends AuthorizingRealm {
     private static final Logger LOGGER = LoggerFactory.getLogger(UserRealm.class);
 
     @Autowired
-    private UserService userService;
+    private StudentService studentService;
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
@@ -33,14 +33,14 @@ public class UserRealm extends AuthorizingRealm {
         //获取token
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         //检索用户
-        UserEntity user = userService.findUserById(Integer.valueOf(token.getUsername()));
+        StudentEntity student = studentService.findStudentById(Integer.valueOf(token.getUsername()));
 
-        if (user == null){
+        if (student == null){
             LOGGER.info("用户不存在");
             return null;
         }
 
-        return new SimpleAuthenticationInfo(user, user.getPassword(),
-                ByteSource.Util.bytes(user.getSalt()), "");
+        return new SimpleAuthenticationInfo(student, student.getPassword(),
+                ByteSource.Util.bytes(student.getSalt()), "");
     }
 }

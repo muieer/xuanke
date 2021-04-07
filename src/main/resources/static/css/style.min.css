@@ -2625,6 +2625,13 @@ dd, dt {
     line-height: 24px;
 }
 
+.footer {
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    bottom: 0px;
+}
+
 /** ----------------------------------
  * 头部信息
  -------------------------------------- */
