@@ -2,12 +2,14 @@ package com.yhh.xuanke.repository;
 
 import com.yhh.xuanke.entiy.PlanEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+//实现复杂条件查询必须继承JpaSpecificationExecutor接口
 @Repository
-public interface PlanRepository extends JpaRepository<PlanEntity, Integer> {
+public interface PlanRepository extends JpaRepository<PlanEntity, Integer>, JpaSpecificationExecutor<PlanEntity> {
 
     //选课
     @Modifying

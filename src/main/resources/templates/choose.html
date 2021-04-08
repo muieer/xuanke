@@ -59,7 +59,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="plan: ${plist}">
+                                    <tr th:each="plan: ${plistDto.list}">
                                         <th scope="row" th:text="${planStat.index+1}"></th>
                                         <td th:text="${plan.cname}"></td>
                                         <td th:text="${plan.cno}"></td>
@@ -119,6 +119,7 @@
                     success: function (data) {
                         if (data == 1) {
                             alert("提交成功，请到信息查询栏中的学生选课情况查询页面查看选课结果！选课结果以此为准！")
+                            //todo 后期应该思考下此操作是否有必要
                             location.reload();
                         }
                     },

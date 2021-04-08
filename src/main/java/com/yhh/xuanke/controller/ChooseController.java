@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.service.ChooseService;
 import org.slf4j.Logger;
@@ -7,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
@@ -24,12 +22,15 @@ public class ChooseController {
     @Autowired
     private ChooseService chooseService;
 
+    //默认从第0页开始，一页10条数据
     @GetMapping("/list")
-    public String getPlanEntityList(Model model) {
+//    @ResponseBody
+    public String getPlanEntityList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
+                                    @RequestParam(value = "size", defaultValue = "10") Integer size) {
 
-        //todo 做分页的逻辑
-        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
-        model.addAttribute("plist", planEntityList);
+//        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
+        ListDTO<PlanEntity> planEntityListDTO = chooseService.getPlanEntityListDTO(pageNum, size);
+        model.addAttribute("plistDto", planEntityListDTO);
         return "choose";
     }
 

@@ -15,6 +15,6 @@ class ChooseServiceImplTest {
 
     @Test
     void getPlanEntityList() {
-        System.out.println(chooseService.getPlanEntityList());
+//        System.out.println(chooseService.getPlanEntityList());
     }
 }

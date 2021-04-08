@@ -58,7 +58,7 @@
                                         </thead>
                                         <!-- 表格内容 -->
                                         <tbody id="tbody">
-                                        <tr th:each="result:${rList}">
+                                        <tr th:each="result:${rListDto.list}">
                                             <th scope="row" th:text="${resultStat.index+1}"></th>
                                             <td th:text="${result.planEntity.cno}"></td>
                                             <td th:text="${result.planEntity.cname}"></td>

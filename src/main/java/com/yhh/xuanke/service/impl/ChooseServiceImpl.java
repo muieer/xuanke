@@ -1,6 +1,7 @@
 package com.yhh.xuanke.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
@@ -10,9 +11,16 @@ import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,13 +35,34 @@ public class ChooseServiceImpl implements ChooseService {
     @Autowired
     private ResultRepository resultRepository;
 
-    @Override
+    /*@Override
     public List<PlanEntity> getPlanEntityList() {
+
+
 
         List<PlanEntity> planEntities = planRepository.findAll();
         return planEntities;
-    }
+    }*/
 
+
+    //实现分页逻辑
+    @Override
+    public ListDTO<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size) {
+        //
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
+        //复杂条件查询,只查询余量不为0的课程
+        Page<PlanEntity> page = planRepository.findAll((Specification<PlanEntity>)(root, query, builder)->{
+            List<Predicate> predicates = new ArrayList<>();
+
+            //余量需要大于0
+            predicates.add(builder.greaterThan(root.get("num"), 0));
+
+            return builder.and(predicates.toArray(new Predicate[0]));
+
+        }, pageable);
+
+        return new ListDTO<>(page.toList(),pageNum,size,page.getTotalElements());
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)

@@ -1,6 +1,7 @@
 package com.yhh.xuanke.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
@@ -8,9 +9,16 @@ import com.yhh.xuanke.service.ResultService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +33,30 @@ public class ResultServiceImpl implements ResultService {
     @Autowired
     private PlanRepository planRepository;
 
-    @Override
+    /*@Override
     public List<ResultEntity> getResultListBySno(Integer sno) {
 
         return resultRepository.findAllBySno(sno);
+    }*/
+
+    @Override
+    public ListDTO<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno) {
+
+        //分页查询
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by("sno"));
+        //jpa复杂查询
+        Page<ResultEntity> page = resultRepository.findAll((Specification<ResultEntity>) (root, query, builder)->{
+            List<Predicate> predicates = new ArrayList<>();
+
+            //根据学号查询
+            if(sno != null){
+                predicates.add(builder.equal(root.get("sno"), sno));
+            }
+
+            return builder.and(predicates.toArray(new Predicate[0]));
+        }, pageable);
+
+        return new ListDTO<>(page.toList(), pageNum, size, page.getTotalElements());
     }
 
     @Override
