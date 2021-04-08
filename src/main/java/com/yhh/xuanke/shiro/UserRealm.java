@@ -35,7 +35,7 @@ public class UserRealm extends AuthorizingRealm {
         //检索用户
         StudentEntity student = studentService.findStudentById(Integer.valueOf(token.getUsername()));
 
-        if (student == null){
+        if (student == null) {
             LOGGER.info("用户不存在");
             return null;
         }

@@ -34,11 +34,12 @@ public class StudentIDUtils {
 
 
     /*
-    * sessionID会在第一次请求的时候写入到cookie中，键值为JESESSIONID
-    * */
+     * sessionID会在第一次请求的时候写入到cookie中，键值为JESESSIONID
+     * */
 
 
-    private static Map<String,Integer> map = new HashMap<>();
+    //存在多个学生同时选课，预先定义大小，以免扩容的时候带来性能开销
+    private static Map<String, Integer> map = new HashMap<>(1000);
 
     //subject有多个,对应多个用户
     public static void addStudentIDToMap(Integer sno) {
@@ -57,10 +58,11 @@ public class StudentIDUtils {
         return map.get(id);
     }
 
-    /*public static void removeUserIdFromMap() {
+    //退出的时候将数据从map中删除，节省内存
+    public static void removeUserIdFromMap() {
         Subject subject = SecurityUtils.getSubject();
         String id = (String) subject.getSession().getId();
         map.remove(id);
-    }*/
+    }
 
 }

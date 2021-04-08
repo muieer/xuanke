@@ -3,7 +3,6 @@ package com.yhh.xuanke.service.impl;
 import com.google.common.base.Preconditions;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
-import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
 import com.yhh.xuanke.service.ChooseService;
@@ -45,12 +44,14 @@ public class ChooseServiceImpl implements ChooseService {
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         resultEntity.setPno(pno);
         resultEntity.setSno(sno);
+
         //todo 添加的时间不是东八区
         resultEntity.setCreateTime(new Date());
         resultRepository.save(resultEntity);
 
         Integer a = planRepository.reduceNumByPno(pno);
-        Preconditions.checkArgument(a!=0,"已经没有剩余数量可选");
+        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选");
+
         /*//余量减一
         try{
             Integer a = planRepository.reduceNumByPno(pno);

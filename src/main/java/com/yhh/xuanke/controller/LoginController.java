@@ -41,7 +41,7 @@ public class LoginController {
 
         //查询学号对应学生的实体类
         Optional<StudentEntity> optional = studentRepository.findById(sno);
-        Preconditions.checkArgument(optional.isPresent(),"该学生不存在！");
+        Preconditions.checkArgument(optional.isPresent(), "该学生不存在！");
         StudentEntity student = optional.get();
 
         // 获取当前的subject
@@ -62,7 +62,7 @@ public class LoginController {
             long timeout = subject.getSession().getTimeout();
 
             //将学生姓名添加到cookie中
-            addCookie("sname",student.getSname(),timeout,response);
+            addCookie("sname", student.getSname(), timeout, response);
 
             LOGGER.info("do login result ==> " + msg);
             return msg;
@@ -83,16 +83,17 @@ public class LoginController {
     public String logout() {
         Subject subject = SecurityUtils.getSubject();
         // 登出
+        StudentIDUtils.removeUserIdFromMap();
         subject.logout();
         LOGGER.info("User " + subject.getPrincipal() + " logout.");
         return "redirect:/home";
     }
 
-    public void addCookie(String key,String value,long timeout,HttpServletResponse response){
+    public void addCookie(String key, String value, long timeout, HttpServletResponse response) {
         Cookie cookie = new Cookie(key, value);
         //这个必须要设置
         cookie.setPath("/");
-        cookie.setMaxAge((int)timeout);
+        cookie.setMaxAge((int) timeout);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
     }

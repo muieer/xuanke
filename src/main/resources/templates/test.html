@@ -6,35 +6,38 @@
 </head>
 <body>
 
-    <div>
-        <input type="checkbox" name="test" class="yhh" value="A">A</input>
-        <input type="checkbox" name="test" class="yhh" value="B">B</input>
-        <input type="checkbox" name="test" class="yhh" value="C">C</input>
-        <input type="checkbox" name="test" class="yhh" value="D">D</input>
-        <input type="button" id="tijiao" value="提交">
-    </div>
+<div>
+    <input type="checkbox" name="test" class="yhh" value="A">A</input>
+    <input type="checkbox" name="test" class="yhh" value="B">B</input>
+    <input type="checkbox" name="test" class="yhh" value="C">C</input>
+    <input type="checkbox" name="test" class="yhh" value="D">D</input>
+    <input type="button" id="tijiao" value="提交">
+</div>
 
 <!--    <button id="tijiao">提交</button>-->
 
-    <script src="../static/js/jquery.min.js"></script>
+<script src="../static/js/jquery.min.js"></script>
 
-    <script>
-        $('#tijiao').click(function () {
-            //jquery获取checkbox选中的多个值
-            /*$.each($('[name=test]:checked'),function () {
-                value = $(this).val();
-                alert(value);
-                // return false;
-            })*/
-            //js获取checkbox选中的多个值
-            var obj = document.getElementsByName("test");
-            for(var i=0;i<obj.length;i++){
-                if(obj[i].checked) alert(obj[i].value);
-            }
+<script>
+    $('#tijiao').click(function () {
+        //jquery获取checkbox选中的多个值
+        /*$.each($('[name=test]:checked'),function () {
+            value = $(this).val();
+            alert(value);
+            // return false;
+        })*/
+        //js获取checkbox选中的多个值
+        var obj = document.getElementsByName("test");
+        for (var i = 0; i < obj.length; i++) {
+            if (obj[i].checked) alert(obj[i].value);
+        }
+        if (confirm("确认选择")) {
+            alert("确认")
+        } else {
 
-        })
-    </script>
-
+        }
+    })
+</script>
 
 
 </body>

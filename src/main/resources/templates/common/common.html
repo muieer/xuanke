@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="common_header(title,links)">
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no"/>
 
     <title th:replace="${title}">选课系统</title>
 
@@ -32,22 +33,29 @@
                         <li th:class="${first=='choose'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 网上选课</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='bixiu'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">选普通理论及实验课</a> </li>
-                                <li th:class="${second=='xuanxiu'?'active':''}"> <a th:href="@{'/choose/list'}">选通识选修课</a> </li>
+                                <li th:class="${second=='bixiu'?'active':''}"><a
+                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">选普通理论及实验课</a>
+                                </li>
+                                <li th:class="${second=='xuanxiu'?'active':''}"><a
+                                        th:href="@{'/choose/list'}">选通识选修课</a></li>
                             </ul>
                         </li>
                         <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息查询</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生考试查询</a> </li>
-                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生成绩查询</a> </li>
-                                <li th:class="${second=='result'?'active':''}"> <a th:href="@{'/result/list'}">学生选课情况查询</a> </li>
+                                <li th:class="${second=='list'?'active':''}"><a
+                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生考试查询</a></li>
+                                <li th:class="${second=='list'?'active':''}"><a
+                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生成绩查询</a></li>
+                                <li th:class="${second=='result'?'active':''}"><a
+                                        th:href="@{'/result/list'}">学生选课情况查询</a></li>
                             </ul>
                         </li>
                         <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息维护</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"> <a th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">个人信息</a> </li>
+                                <li th:class="${second=='list'?'active':''}"><a
+                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">个人信息</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -79,14 +87,14 @@
                     <ul class="topbar-right">
                         <li class="dropdown dropdown-profile">
                             <a href="javascript:void(0)" data-toggle="dropdown">
-<!--                                改成从cookie中获取学生姓名-->
+                                <!--                                改成从cookie中获取学生姓名-->
                                 <span th:id="sno" th:each="cookie :${#httpServletRequest.getCookies()}"
-                                    th:if="${cookie.getName().equals('sname')}" th:text="${cookie.getValue()}">
+                                      th:if="${cookie.getName().equals('sname')}" th:text="${cookie.getValue()}">
                                 <span></span> <span class="caret"></span></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li class="divider"></li>
-                                <li> <a th:href="@{/logout}"><i class="mdi mdi-logout-variant"></i> 退出登录</a> </li>
+                                <li><a th:href="@{/logout}"><i class="mdi mdi-logout-variant"></i> 退出登录</a></li>
                             </ul>
                         </li>
                         <!--切换主题配色-->
@@ -200,7 +208,7 @@
     <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
-    <th:block th:replace="${scripts}" />
+    <th:block th:replace="${scripts}"/>
 </div>
 
 </body>

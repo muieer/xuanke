@@ -43,6 +43,7 @@ public class ResultServiceImpl implements ResultService {
         resultRepository.delete(resultEntity);
 
         //授课计划余量加一
-        planRepository.increaseNumByPno(resultEntity.getPno());
+        Integer a = planRepository.increaseNumByPno(resultEntity.getPno());
+        Preconditions.checkArgument(a != 0, "余量不能大于容量");
     }
 }

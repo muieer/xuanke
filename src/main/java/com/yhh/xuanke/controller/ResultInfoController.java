@@ -25,19 +25,19 @@ public class ResultInfoController {
     private ResultService resultService;
 
     @GetMapping("/list")
-    public String chooseResultList(Model model){
+    public String chooseResultList(Model model) {
         //todo 做分页的逻辑
         //在这要根据学号查询选课结果，不然直接查表会拿到其他学生的选课结果
         Integer sno = StudentIDUtils.getStudentIDFromMap();
-        LOGGER.info("取得学生学号 {}",sno);
+        LOGGER.info("取得学生学号 {}", sno);
         List<ResultEntity> resultList = resultService.getResultListBySno(sno);
-        model.addAttribute("rList",resultList);
+        model.addAttribute("rList", resultList);
         return "choose_detail";
     }
 
     @PostMapping("/noChoose")
     @ResponseBody
-    public String noChoose(Integer rno){
+    public String noChoose(Integer rno) {
 
         resultService.noChoose(rno);
         return "1";

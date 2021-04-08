@@ -23,7 +23,7 @@ public class StudentServiceImpl implements StudentService {
     public StudentEntity findStudentById(Integer sno) {
 
         Optional<StudentEntity> optional = studentRepository.findById(sno);
-        Preconditions.checkArgument(optional.isPresent(),"用户不存在！");
+        Preconditions.checkArgument(optional.isPresent(), "用户不存在！");
         return optional.get();
     }
 }
