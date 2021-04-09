@@ -60,7 +60,7 @@
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
                                     <tr th:each="plan: ${Plan}">
-                                        <th scope="row" th:text="${planStat.index+1}"></th>
+                                        <th scope="row" th:text="${planStat.index+1+Plan.size*Plan.number}"></th>
                                         <td th:text="${plan.cname}"></td>
                                         <td th:text="${plan.cno}"></td>
                                         <td th:text="${plan.cteacher}"></td>
