@@ -59,7 +59,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="plan: ${plistDto.list}">
+                                    <tr th:each="plan: ${Plan}">
                                         <th scope="row" th:text="${planStat.index+1}"></th>
                                         <td th:text="${plan.cname}"></td>
                                         <td th:text="${plan.cno}"></td>
@@ -77,6 +77,32 @@
                                     </tr>
                                     </tbody>
                                 </table>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/choose/list?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${Plan.number != 0}" th:href="@{'/choose/list?pageNum=' + ${Plan.number - 1}}" th:text="上一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Plan.number == 0}" th:href="@{'/choose/list?pageNum=0'}" th:text="上一页"></a>
+                                        </li>
+
+                                        <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum ne Plan.pageable.getPageNumber()}"></a>
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum eq Plan.pageable.getPageNumber()}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+                                        </li>
+                                        <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
+
+                                        <li>
+                                            <a th:if="${Plan.number != (Plan.totalPages-1)}" th:href="@{'/choose/list?pageNum=' + ${Plan.number + 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Plan.number == (Plan.totalPages-1)}" th:href="@{'/choose/list?pageNum=' + ${Plan.totalPages - 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li><a th:href="@{'/choose/list?pageNum='+ ${Plan.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
+                                </div>
                             </div>
 
                         </div>

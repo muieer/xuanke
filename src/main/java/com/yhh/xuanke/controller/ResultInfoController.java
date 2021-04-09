@@ -1,12 +1,12 @@
 package com.yhh.xuanke.controller;
 
-import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.service.ResultService;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +29,8 @@ public class ResultInfoController {
         //在这要根据学号查询选课结果，不然直接查表会拿到其他学生的选课结果
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         LOGGER.info("取得学生学号 {}", sno);
-        ListDTO<ResultEntity> resultEntityListDTO = resultService.getResultListBySno(pageNum, size, sno);
-        model.addAttribute("rListDto", resultEntityListDTO);
+        Page<ResultEntity> page = resultService.getResultListBySno(pageNum, size, sno);
+        model.addAttribute("Result", page);
         return "choose_detail";
     }
 

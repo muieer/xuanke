@@ -1,7 +1,6 @@
 package com.yhh.xuanke.service.impl;
 
 import com.google.common.base.Preconditions;
-import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
@@ -47,7 +46,7 @@ public class ChooseServiceImpl implements ChooseService {
 
     //实现分页逻辑
     @Override
-    public ListDTO<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size) {
+    public Page<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size) {
         //
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
         //复杂条件查询,只查询余量不为0的课程
@@ -61,7 +60,7 @@ public class ChooseServiceImpl implements ChooseService {
 
         }, pageable);
 
-        return new ListDTO<>(page.toList(),pageNum,size,page.getTotalElements());
+        return page;
     }
 
     @Override

@@ -58,7 +58,7 @@
                                         </thead>
                                         <!-- 表格内容 -->
                                         <tbody id="tbody">
-                                        <tr th:each="result:${rListDto.list}">
+                                        <tr th:each="result:${Result}">
                                             <th scope="row" th:text="${resultStat.index+1}"></th>
                                             <td th:text="${result.planEntity.cno}"></td>
                                             <td th:text="${result.planEntity.cname}"></td>
@@ -74,6 +74,32 @@
                                         </tbody>
 
                                     </table>
+                                </div>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/result/list?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${Result.number!=0}" th:href="@{'/result/list?pageNum=' + ${Result.number - 1}}" >上一页</a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Result.number==0}" th:href="@{'/result/list?pageNum=0'}" >上一页</a>
+                                        </li>
+
+                                        <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum ne Plan.pageable.getPageNumber()}"></a>
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum eq Plan.pageable.getPageNumber()}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+                                        </li>
+                                        <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
+
+                                        <li>
+                                            <a th:if="${Result.number != (Result.totalPages-1)}" th:href="@{'/result/list?pageNum=' + ${Result.number + 1}}" >下一页</a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Result.number == (Result.totalPages-1)}" th:href="@{'/result/list?pageNum=' + ${Result.totalPages - 1}}" >下一页</a>
+                                        </li>
+                                        <li><a th:href="@{'/result/list?pageNum='+ ${Result.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
                                 </div>
                             </div>
 
@@ -113,7 +139,8 @@
                         if (data == 1) {
                             alert("退选成功！");
                             //重新加载页面
-                            location.reload();
+                            // location.reload();
+                            location.href = "/result/list?pageNum=0";
                         }
                     },
                     error: function () {

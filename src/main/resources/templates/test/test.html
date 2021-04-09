@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>模拟checkbox多选提交</title>
+    <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/color.css">
 </head>
 <body>
 
@@ -14,9 +16,20 @@
     <input type="button" id="tijiao" value="提交">
 </div>
 
+<div class="myColor">
+    <ul class="pagination  pull-right">
+        <li><a class="btn btn-success btn-lg active" href="#" >首页</a></li>
+        <li><a class="btn btn-success btn-lg active" href="#" role="button">上一页</a></li>
+        <li><a class="btn btn-success btn-lg active" href="#" role="button">3</a></li>
+        <li><a class="btn btn-success btn-lg active" href="#" role="button">下一页</a></li>
+        <li><a class="btn btn-success btn-lg active" href="#" >首页</a></li>
+    </ul>
+</div>
+
 <!--    <button id="tijiao">提交</button>-->
 
-<script src="../static/js/jquery.min.js"></script>
+<script src="../../static/js/jquery.min.js"></script>
+<script src="../../static/bootstrap/js/bootstrap.min.js"></script>
 
 <script>
     $('#tijiao').click(function () {

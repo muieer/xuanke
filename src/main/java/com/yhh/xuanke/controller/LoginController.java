@@ -89,7 +89,7 @@ public class LoginController {
         return "redirect:/home";
     }
 
-    public void addCookie(String key, String value, long timeout, HttpServletResponse response) {
+    private void addCookie(String key, String value, long timeout, HttpServletResponse response) {
         Cookie cookie = new Cookie(key, value);
         //这个必须要设置
         cookie.setPath("/");

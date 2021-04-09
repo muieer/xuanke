@@ -1,7 +1,6 @@
 package com.yhh.xuanke.service.impl;
 
 import com.google.common.base.Preconditions;
-import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
@@ -40,7 +39,7 @@ public class ResultServiceImpl implements ResultService {
     }*/
 
     @Override
-    public ListDTO<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno) {
+    public Page<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno) {
 
         //分页查询
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("sno"));
@@ -56,7 +55,7 @@ public class ResultServiceImpl implements ResultService {
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
 
-        return new ListDTO<>(page.toList(), pageNum, size, page.getTotalElements());
+        return page;
     }
 
     @Override

@@ -7,13 +7,14 @@ public class ListDTO<T> {
     private List<T> list;
     private int page;
     private int size;
-    private long totalNum;
+    //总页数
+    private long totalPages;
 
-    public ListDTO(List<T> list, int page, int size, long totalNum) {
+    public ListDTO(List<T> list, int page, int size, long totalPages) {
         this.list = list;
         this.page = page;
         this.size = size;
-        this.totalNum = totalNum;
+        this.totalPages = totalPages;
     }
 
     public List<T> getList() {
@@ -40,11 +41,11 @@ public class ListDTO<T> {
         this.size = size;
     }
 
-    public long getTotalNum() {
-        return totalNum;
+    public long getTotalPages() {
+        return totalPages;
     }
 
-    public void setTotalNum(int totalNum) {
-        this.totalNum = totalNum;
+    public void setTotalPages(int totalPages) {
+        this.totalPages = totalPages;
     }
 }
