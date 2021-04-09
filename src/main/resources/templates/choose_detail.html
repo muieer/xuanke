@@ -69,7 +69,7 @@
                                             <td th:text="${result.planEntity.studylocation}"></td>
                                             <td th:text="${result.planEntity.cnature}"></td>
                                             <td th:text="${result.planEntity.college}"></td>
-                                            <td><input type="checkbox" name="noChoose" th:value="${result.rno}"></td>
+                                            <td><input type="checkbox" name="noChoose" th:value="${result.pno}"></td>
                                         </tr>
                                         </tbody>
 
@@ -118,13 +118,13 @@
 <div th:replace="common/common::common_js(~{::script})">
     <script>
 
-        function getRno() {
-            var rno = "";
+        function getPno() {
+            var pno = "";
             $.each($('input:checkbox:checked'), function () {
-                rno = $(this).val();
+                pno = $(this).val();
                 return false;
             });
-            return rno;
+            return pno;
         }
 
         $('#noChoose').click(function () {
@@ -133,7 +133,7 @@
                     url: "/result/noChoose",
                     type: "POST",
                     data: {
-                        rno: getRno(),
+                        rno: getPno(),
                     },
                     success: function (data) {
                         if (data == 1) {

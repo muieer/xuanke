@@ -5,6 +5,7 @@ import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
 import com.yhh.xuanke.service.ResultService;
+import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,10 @@ public class ResultServiceImpl implements ResultService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void noChoose(Integer rno) {
+    public void noChoose(Integer pno) {
 
-        Optional<ResultEntity> optional = resultRepository.findById(rno);
-        Preconditions.checkArgument(optional.isPresent(), "没有该条选课记录");
-        ResultEntity resultEntity = optional.get();
+        ResultEntity resultEntity = resultRepository.findResultEntityByPnoAndSno(pno, StudentIDUtils.getStudentIDFromMap());
+        Preconditions.checkArgument(resultEntity!=null, "没有该条选课记录");
 
         //选课结果表删除掉该条选课记录
         resultRepository.delete(resultEntity);

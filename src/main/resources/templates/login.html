@@ -91,10 +91,13 @@
         g_showLoading();
         // md5盐值加密
         let inputPass = $("#password").val();
-        let salt = g_passsword_salt;
+        // let salt = passsword_salt;
+        let salt = 'yhhbysl';
+        // alert(salt);
         let str = "" + salt.charAt(0) + salt.charAt(2) + inputPass + salt.charAt(5) + salt.charAt(4);
-        // let password = md5(str);
-        let password = inputPass; //todo md5加密
+        // alert(str);
+        let password = md5(str);
+        // let password = inputPass; //todo md5加密
         // 异步请求
         $.ajax({
             url: "/do/login",

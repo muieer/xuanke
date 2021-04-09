@@ -36,9 +36,9 @@ public class ResultInfoController {
 
     @PostMapping("/noChoose")
     @ResponseBody
-    public String noChoose(Integer rno) {
+    public String noChoose(Integer pno) {
 
-        resultService.noChoose(rno);
+        resultService.noChoose(pno);
         return "1";
     }
 

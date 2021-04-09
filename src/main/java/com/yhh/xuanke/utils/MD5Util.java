@@ -30,6 +30,7 @@ public class MD5Util {
      */
     public static String formPassToDBPass(String formPass, String salt) {
         String str = "" + salt.charAt(0) + salt.charAt(2) + formPass + salt.charAt(5) + salt.charAt(4);
+        System.out.println(str);
         return md5(str);
     }
 
@@ -43,7 +44,7 @@ public class MD5Util {
     }
 
     public static void main(String[] args) {
-        System.out.println(formPassToDBPass("123", "1a2b3c4d"));
+        System.out.println(formPassToDBPass("yhh666", "yhhbysl"));
     }
 
 }

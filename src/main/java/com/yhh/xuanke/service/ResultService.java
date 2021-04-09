@@ -12,5 +12,5 @@ public interface ResultService {
 
     Page<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno);
 
-    void noChoose(Integer rno);
+    void noChoose(Integer pno);
 }

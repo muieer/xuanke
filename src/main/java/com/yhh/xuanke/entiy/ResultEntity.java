@@ -1,24 +1,23 @@
 package com.yhh.xuanke.entiy;
 
+import com.yhh.xuanke.entiy.pk.ResultPK;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
+@IdClass(ResultPK.class)
 @Table(name = "result")
-public class ResultEntity {
-
+public class ResultEntity implements Serializable {
 
     @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer rno;
-
-    @Column
+    @Column(name = "pno")
     private Integer pno;
 
-    @Column
+    @Id
+    @Column(name = "sno")
     private Integer sno;
 
     @CreatedDate
@@ -30,13 +29,6 @@ public class ResultEntity {
     @JoinColumn(name = "pno", insertable = false, updatable = false)
     private PlanEntity planEntity;
 
-    public Integer getRno() {
-        return rno;
-    }
-
-    public void setRno(Integer rno) {
-        this.rno = rno;
-    }
 
     public PlanEntity getPlanEntity() {
         return planEntity;
@@ -73,8 +65,7 @@ public class ResultEntity {
     @Override
     public String toString() {
         return "ResultEntity{" +
-                "rno=" + rno +
-                ", pno=" + pno +
+                "pno=" + pno +
                 ", sno=" + sno +
                 ", createTime=" + createTime +
                 ", planEntity=" + planEntity +

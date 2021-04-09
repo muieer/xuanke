@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface ResultRepository extends JpaRepository<ResultEntity, Integer>, JpaSpecificationExecutor<ResultEntity> {
 
-    //根据学号查询选课结果
-    List<ResultEntity> findAllBySno(Integer sno);
+    //根据学号和授课号查询单条选课结果
+    ResultEntity findResultEntityByPnoAndSno(Integer pno, Integer sno);
 }

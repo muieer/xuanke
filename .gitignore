@@ -40,7 +40,3 @@ run.log*
 
 #test file
 src/main/resources/templates/test/
-
-.mvn
-mvnw
-mvnw.cmd

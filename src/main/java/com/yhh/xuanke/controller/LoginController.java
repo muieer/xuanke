@@ -38,6 +38,7 @@ public class LoginController {
 
         Integer sno = studentEntity.getSno();
         String password = studentEntity.getPassword();
+        LOGGER.info("从前端取得的输入密码{}", password);
 
         //查询学号对应学生的实体类
         Optional<StudentEntity> optional = studentRepository.findById(sno);

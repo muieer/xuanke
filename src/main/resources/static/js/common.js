@@ -131,7 +131,7 @@ function g_showLoading(){
     return idx;
 }
 //salt
-var g_passsword_salt="1a2b3c4d"
+// var passsword_salt = "yhhbysl";
 // 获取url参数
 function g_getQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
