@@ -40,10 +40,11 @@ public class ResultServiceImpl implements ResultService {
     }*/
 
     @Override
-    public Page<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno) {
+    public Page<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno) {
 
         //分页查询
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("sno"));
+
         //jpa复杂查询
         Page<ResultEntity> page = resultRepository.findAll((Specification<ResultEntity>) (root, query, builder)->{
             List<Predicate> predicates = new ArrayList<>();
@@ -62,6 +63,10 @@ public class ResultServiceImpl implements ResultService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void noChoose(Integer pno) {
+
+        //为啥突然拿不到授课编号了，头疼，头大，难顶
+        LOGGER.info("得到授课编号{}", pno);
+        //原因：前端参数名称写错了，要仔细啊
 
         ResultEntity resultEntity = resultRepository.findResultEntityByPnoAndSno(pno, StudentIDUtils.getStudentIDFromMap());
         Preconditions.checkArgument(resultEntity!=null, "没有该条选课记录");

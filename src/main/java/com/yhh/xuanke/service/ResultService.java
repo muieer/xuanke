@@ -10,7 +10,7 @@ public interface ResultService {
 
 //    ListDTO<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno);
 
-    Page<ResultEntity> getResultListBySno(Integer pageNum, Integer size, Integer sno);
+    Page<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno);
 
     void noChoose(Integer pno);
 }
