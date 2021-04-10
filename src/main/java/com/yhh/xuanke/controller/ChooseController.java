@@ -27,7 +27,7 @@ public class ChooseController {
                                     @RequestParam(value = "size", defaultValue = "10") Integer size) {
 
 //        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
-        Page<PlanEntity> page = chooseService.getPlanEntityListDTO(pageNum, size);
+        Page<PlanEntity> page = chooseService.getPlanEntityListPage(pageNum, size);
         model.addAttribute("Plan", page);
         return "choose";
     }

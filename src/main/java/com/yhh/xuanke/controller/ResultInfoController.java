@@ -29,7 +29,7 @@ public class ResultInfoController {
         //在这要根据学号查询选课结果，不然直接查表会拿到其他学生的选课结果
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         LOGGER.info("取得学生学号 {}", sno);
-        Page<ResultEntity> page = resultService.getResultListBySno(pageNum, size, sno);
+        Page<ResultEntity> page = resultService.getResultListPageBySno(pageNum, size, sno);
         model.addAttribute("Result", page);
         return "choose_detail";
     }

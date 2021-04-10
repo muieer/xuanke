@@ -10,7 +10,7 @@ public interface ChooseService {
 
 //    ListDTO<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size);
 
-    Page<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size);
+    Page<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size);
 
     void doChoose(Integer pno);
 }

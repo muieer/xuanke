@@ -46,9 +46,10 @@ public class ChooseServiceImpl implements ChooseService {
 
     //实现分页逻辑
     @Override
-    public Page<PlanEntity> getPlanEntityListDTO(Integer pageNum, Integer size) {
-        //
+    public Page<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size) {
+
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
+
         //复杂条件查询,只查询余量不为0的课程
         Page<PlanEntity> page = planRepository.findAll((Specification<PlanEntity>)(root, query, builder)->{
             List<Predicate> predicates = new ArrayList<>();
@@ -67,18 +68,23 @@ public class ChooseServiceImpl implements ChooseService {
     @Transactional(rollbackFor = Exception.class)
     public void doChoose(Integer pno) {
 
-        //写入选课结果
-        ResultEntity resultEntity = new ResultEntity();
-        Integer sno = StudentIDUtils.getStudentIDFromMap();
-        resultEntity.setPno(pno);
-        resultEntity.setSno(sno);
+//        LOGGER.info("得到授课编号{}", pno);
 
-        //todo 添加的时间不是东八区
-        resultEntity.setCreateTime(new Date());
-        resultRepository.save(resultEntity);
+        Integer sno = StudentIDUtils.getStudentIDFromMap();
+        //先读取此节课的选课结果
+        ResultEntity entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
+        Preconditions.checkArgument(entity==null, "重复选课！");
+
+        //没选课的话会得到null，需new，否则会发生空指针异常
+        entity = new ResultEntity();
+        entity.setPno(pno);
+        entity.setSno(sno);
+        entity.setCreateTime(new Date());
+        //如果课程已经存在，再次插入不会成功，变成更新语句,事先判断此课是否已经选择
+        resultRepository.saveAndFlush(entity);
 
         Integer a = planRepository.reduceNumByPno(pno);
-        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选");
+        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
         /*//余量减一
         try{
