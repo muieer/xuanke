@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common::common_header(~{::title},~{})">
+
+    <title>选课</title>
+
+</head>
+
+<body>
+<!--左侧导航-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="~{common/common::sidebar(first='choose',second='bixiu')}"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <div th:replace="~{common/common::topbar}"></div>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- 可选表 -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>授课计划表</h3>
+                                <div class="pull-right">
+                                    <button class="btn btn-label btn-w-lg btn-primary" id="confirm">
+                                        <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认选课
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <!-- 表头 -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">序号</th>
+                                        <th scope="col">课程名称</th>
+                                        <th scope="col">课程代码</th>
+                                        <th scope="col">教师姓名</th>
+                                        <th scope="col">上课时间</th>
+                                        <th scope="col">上课地点</th>
+                                        <th scope="col">学分</th>
+                                        <th scope="col">学时</th>
+                                        <th scope="col">起始结束周</th>
+                                        <th scope="col">容量</th>
+                                        <th scope="col">余量</th>
+                                        <th scope="col">课程性质</th>
+                                        <th scope="col">开课学院</th>
+                                        <th scope="col">选择</th>
+                                    </tr>
+                                    </thead>
+                                    <!-- 表格内容 -->
+                                    <tbody id="tbody">
+                                    <tr th:each="plan: ${detail}">
+                                        <th scope="row" th:text="${planStat.index+1+detail.size*detail.number}"></th>
+                                        <td th:text="${plan.cname}"></td>
+                                        <td th:text="${plan.cno}"></td>
+                                        <td th:text="${plan.cteacher}"></td>
+                                        <td th:text="${plan.studytime}"></td>
+                                        <td th:text="${plan.studylocation}"></td>
+                                        <td th:text="${plan.credit}"></td>
+                                        <td th:text="${plan.xueshi}"></td>
+                                        <td th:text="${plan.starttoend}"></td>
+                                        <td th:text="${plan.capacity}"></td>
+                                        <td th:text="${plan.num}"></td>
+                                        <td th:text="${plan.cnature}"></td>
+                                        <td th:text="${plan.college}"></td>
+                                        <td><input type="checkbox" name="doChoose" th:value="${plan.pno}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/clazz/detail?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${detail.number != 0}" th:href="@{'/clazz/detail?pageNum=' + ${detail.number - 1}}" th:text="上一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${detail.number == 0}" th:href="@{'/clazz/detail?pageNum=0'}" th:text="上一页"></a>
+                                        </li>
+
+                                        <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum ne Plan.pageable.getPageNumber()}"></a>
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum eq Plan.pageable.getPageNumber()}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+                                        </li>
+                                        <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
+
+                                        <li>
+                                            <a th:if="${detail.number != (detail.totalPages-1)}" th:href="@{'/clazz/detail?pageNum=' + ${detail.number + 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${detail.number == (detail.totalPages-1)}" th:href="@{'/clazz/detail?pageNum=' + ${detail.totalPages - 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li><a th:href="@{'/clazz/detail?pageNum='+ ${detail.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+
+
+    </div>
+</div>
+
+
+<!-- thymeleaf fragment -->
+<div th:replace="common/common::common_js(~{::script})">
+    <script>
+
+        function getPno() {
+            var pno = "";
+            $.each($('input:checkbox:checked'), function () {
+                pno = $(this).val();
+                return false;
+            });
+            return pno;
+        }
+
+        $('#confirm').click(function () {
+            if (confirm("是否确认选择此节课，请谨慎考虑！")) {
+                $.ajax({
+                    url: "/choose/confirm",
+                    type: "POST",
+                    data: {
+                        pno: getPno(),
+                    },
+                    success: function (data) {
+                        if (data == 1) {
+                            alert("提交成功，请到信息查询栏中的学生选课情况查询页面查看选课结果！选课结果以此为准！")
+                            //todo 后期应该思考下此操作是否有必要
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        alert("执行错误！");
+                    }
+                });
+            } else {
+                //刷新，得到最新的课程余量
+                location.reload();
+            }
+
+
+        });
+    </script>
+</div>
+
+</body>
+</html>

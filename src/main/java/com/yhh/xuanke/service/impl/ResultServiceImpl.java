@@ -42,8 +42,8 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public Page<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno) {
 
-        //分页查询
-        Pageable pageable = PageRequest.of(pageNum, size, Sort.by("sno"));
+        //分页查询,按选课时间降序排序，目的是看到最新选的课
+        Pageable pageable = PageRequest.of(pageNum, size, Sort.by(Sort.Direction.DESC,"createTime"));
 
         //jpa复杂查询
         Page<ResultEntity> page = resultRepository.findAll((Specification<ResultEntity>) (root, query, builder)->{

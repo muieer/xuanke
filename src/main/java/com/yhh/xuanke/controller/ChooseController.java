@@ -21,7 +21,7 @@ public class ChooseController {
     private ChooseService chooseService;
 
     //默认从第0页开始，一页10条数据
-    @GetMapping("/list")
+    @GetMapping("/elective/list")
 //    @ResponseBody
     public String getPlanEntityList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
                                     @RequestParam(value = "size", defaultValue = "10") Integer size) {
@@ -29,7 +29,7 @@ public class ChooseController {
 //        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
         Page<PlanEntity> page = chooseService.getPlanEntityListPage(pageNum, size);
         model.addAttribute("Plan", page);
-        return "choose";
+        return "elective";
     }
 
     @PostMapping("/confirm")

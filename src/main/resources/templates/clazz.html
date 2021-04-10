@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common::common_header(~{::title},~{})">
+
+    <title>选课</title>
+
+</head>
+
+<body>
+<!--左侧导航-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="~{common/common::sidebar(first='choose',second='major')}"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <div th:replace="~{common/common::topbar}"></div>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- 可选表 -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>必修课课程列表</h3>
+                                <!--<div class="pull-right">
+                                    <button class="btn btn-label btn-w-lg btn-primary" id="confirm">
+                                        <label><i class="mdi mdi-checkbox-marked-circle-outline"></i></label> 确认选课
+                                    </button>
+                                </div>-->
+                            </div>
+
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <!-- 表头 -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">序号</th>
+                                        <th scope="col">课程名称</th>
+                                        <th scope="col">课程代码</th>
+                                        <th scope="col">学分</th>
+                                        <th scope="col">学时</th>
+                                        <th scope="col">起始结束周</th>
+                                        <th scope="col">课程性质</th>
+                                        <th scope="col">开课学院</th>
+                                        <th scope="col">考核方式</th>
+                                        <th scope="col">详情</th>
+                                    </tr>
+                                    </thead>
+                                    <!-- 表格内容 -->
+                                    <tbody id="tbody">
+                                    <tr th:each="clazz: ${Clazz}">
+                                        <th scope="row" th:text="${clazzStat.index+1 + Clazz.size*Clazz.number}"></th>
+                                        <td th:text="${clazz.cname}"></td>
+                                        <td th:text="${clazz.cno}"></td>
+                                        <td th:text="${clazz.credit}"></td>
+                                        <td th:text="${clazz.xueshi}"></td>
+                                        <td th:text="${clazz.starttoend}"></td>
+                                        <td th:text="${clazz.cnature}"></td>
+                                        <td th:text="${clazz.college}"></td>
+                                        <td th:text="${clazz.testtype}"></td>
+                                        <td><input type="button" id="clazzDetail" value="详情" th:onclick="getClazzDetail([[${clazz.cno}]],this)"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/clazz/list?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${Clazz.number != 0}" th:href="@{'/clazz/list?pageNum=' + ${Clazz.number - 1}}" th:text="上一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Clazz.number == 0}" th:href="@{'/clazz/list?pageNum=0'}" th:text="上一页"></a>
+                                        </li>
+
+                                        <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum ne Plan.pageable.getPageNumber()}"></a>
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum eq Plan.pageable.getPageNumber()}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+                                        </li>
+                                        <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
+
+                                        <li>
+                                            <a th:if="${Clazz.number != (Clazz.totalPages-1)}" th:href="@{'/clazz/list?pageNum=' + ${Clazz.number + 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Clazz.number == (Clazz.totalPages-1)}" th:href="@{'/clazz/list?pageNum=' + ${Clazz.totalPages - 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li><a th:href="@{'/clazz/list?pageNum='+ ${Clazz.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+
+
+    </div>
+</div>
+
+
+<!-- thymeleaf fragment -->
+<div th:replace="common/common::common_js(~{::script})">
+    <script >
+
+        function getClazzDetail(cno) {
+            location.href = "/clazz/detail?cno="+cno;
+        }
+
+    </script>
+</div>
+
+</body>
+</html>

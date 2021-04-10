@@ -30,17 +30,21 @@
                         <li th:class="${first}=='main'?'nav-item active':'nav-item'">
                             <a th:href="@{/index}"><i class="mdi mdi-home"></i> 首页</a>
                         </li>
-                        <li th:class="${first=='choose'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                        <li th:class="${first=='choose'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 网上选课</a>
                             <ul class="nav nav-subnav">
+                                <li th:class="${second=='major'?'active':''}"><a
+                                        th:href="@{'/clazz/list'}">必修课课程表</a>
+                                </li>
+<!--                                直接点击无效-->
                                 <li th:class="${second=='bixiu'?'active':''}"><a
-                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">选普通理论及实验课</a>
+                                        href="javascript:void(0)">必修课授课计划</a>
                                 </li>
                                 <li th:class="${second=='xuanxiu'?'active':''}"><a
-                                        th:href="@{'/choose/list'}">选通识选修课</a></li>
+                                        th:href="@{'/choose/elective/list'}">选修课授课计划</a></li>
                             </ul>
                         </li>
-                        <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                        <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息查询</a>
                             <ul class="nav nav-subnav">
                                 <li th:class="${second=='list'?'active':''}"><a
@@ -51,7 +55,7 @@
                                         th:href="@{'/result/list'}">学生选课情况查询</a></li>
                             </ul>
                         </li>
-                        <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav'}">
+                        <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息维护</a>
                             <ul class="nav nav-subnav">
                                 <li th:class="${second=='list'?'active':''}"><a
