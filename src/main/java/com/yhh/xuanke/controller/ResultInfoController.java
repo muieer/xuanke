@@ -11,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/result")
 public class ResultInfoController {
@@ -31,7 +29,7 @@ public class ResultInfoController {
         LOGGER.info("取得学生学号 {}", sno);
         Page<ResultEntity> page = resultService.getResultListPageBySno(pageNum, size, sno);
         model.addAttribute("Result", page);
-        return "choose_detail";
+        return "result";
     }
 
     @PostMapping("/noChoose")

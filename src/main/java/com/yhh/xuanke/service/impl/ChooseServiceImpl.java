@@ -57,6 +57,9 @@ public class ChooseServiceImpl implements ChooseService {
             //余量需要大于0
             predicates.add(builder.greaterThan(root.get("num"), 0));
 
+            //只筛选选修课,代码大于0
+            predicates.add(builder.greaterThan(root.get("naturecode"),0));
+
             return builder.and(predicates.toArray(new Predicate[0]));
 
         }, pageable);
@@ -68,6 +71,7 @@ public class ChooseServiceImpl implements ChooseService {
     @Transactional(rollbackFor = Exception.class)
     public void doChoose(Integer pno) {
 
+        //todo 待解决上课时间冲突问题
 //        LOGGER.info("得到授课编号{}", pno);
 
         Integer sno = StudentIDUtils.getStudentIDFromMap();
