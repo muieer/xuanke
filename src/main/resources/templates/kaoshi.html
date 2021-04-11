@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common::common_header(~{::title},~{})">
+
+    <title>选课</title>
+
+</head>
+
+<body>
+<!--左侧导航-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="~{common/common::sidebar(first='info',second='kaoshi')}"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <div th:replace="~{common/common::topbar}"></div>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- 可选表 -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>本学期考试科目及详情</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <!-- 表头 -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">序号</th>
+                                        <th scope="col">课程名称</th>
+                                        <th scope="col">课程代码</th>
+                                        <th scope="col">姓名</th>
+                                        <th scope="col">时间</th>
+                                        <th scope="col">地点</th>
+                                        <th scope="col">形式</th>
+                                        <th scope="col">座位号</th>
+                                    </tr>
+                                    </thead>
+                                    <!-- 表格内容 -->
+                                    <tbody id="tbody">
+                                    <tr th:each="kaoshi: ${Kaoshi}">
+                                        <th scope="row" th:text="${kaoshiStat.index+1 + Kaoshi.size*Kaoshi.number}"></th>
+                                        <td th:text="${kaoshi.cname}"></td>
+                                        <td th:text="${kaoshi.cno}"></td>
+                                        <td th:text="${kaoshi.sname}"></td>
+                                        <td th:text="${kaoshi.time}"></td>
+                                        <td th:text="${kaoshi.location}"></td>
+                                        <td th:text="${kaoshi.type}"></td>
+                                        <td th:text="${kaoshi.seat}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/kaoshi/list?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${Kaoshi.number != 0}" th:href="@{'/kaoshi/list?pageNum=' + ${Kaoshi.number - 1}}" th:text="上一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Kaoshi.number == 0}" th:href="@{'/kaoshi/list?pageNum=0'}" th:text="上一页"></a>
+                                        </li>
+
+                                        <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum ne Plan.pageable.getPageNumber()}"></a>
+                                            <a th:href="'/choose/list?pageNum=' + ${pageNum}" th:text="${pageNum + 1}" th:if="${pageNum eq Plan.pageable.getPageNumber()}" th:style="'font-weight:bold;background: #6faed9;'"></a>
+                                        </li>
+                                        <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
+
+                                        <li>
+                                            <a th:if="${Kaoshi.number != (Kaoshi.totalPages-1)}" th:href="@{'/kaoshi/list?pageNum=' + ${Kaoshi.number + 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Kaoshi.number == (Kaoshi.totalPages-1)}" th:href="@{'/kaoshi/list?pageNum=' + ${Kaoshi.totalPages - 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li><a th:href="@{'/kaoshi/list?pageNum='+ ${Kaoshi.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+
+
+    </div>
+</div>
+
+
+<!-- thymeleaf fragment -->
+<div th:replace="common/common::common_js(~{::script})">
+    <script >
+
+
+    </script>
+</div>
+
+</body>
+</html>

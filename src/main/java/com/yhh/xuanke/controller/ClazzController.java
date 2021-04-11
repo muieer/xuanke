@@ -46,7 +46,8 @@ public class ClazzController {
 
         Page<PlanEntity> page = clazzService.getClazzOfPlanEntityPage(cno, pageNum, size);
         model.addAttribute("detail", page);
-
+        //留给选必修课页面分页传参用
+        model.addAttribute("cno", cno);
         return "major";
     }
 

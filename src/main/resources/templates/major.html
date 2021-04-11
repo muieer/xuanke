@@ -80,12 +80,12 @@
 
                                 <div>
                                     <ul class="pagination pull-right">
-                                        <li><a th:href="@{'/clazz/detail?pageNum=0'}">首页</a></li>
+                                        <li><a th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=0'}">首页</a></li>
                                         <li>
-                                            <a th:if="${detail.number != 0}" th:href="@{'/clazz/detail?pageNum=' + ${detail.number - 1}}" th:text="上一页"></a>
+                                            <a th:if="${detail.number != 0}" th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=' + ${detail.number - 1}}" th:text="上一页"></a>
                                         </li>
                                         <li>
-                                            <a th:if="${detail.number == 0}" th:href="@{'/clazz/detail?pageNum=0'}" th:text="上一页"></a>
+                                            <a th:if="${detail.number == 0}" th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=0'}" th:text="上一页"></a>
                                         </li>
 
                                         <!--<li th:each="pageNum:${#numbers.sequence(0, Plan.getTotalPages() - 1)}">
@@ -95,12 +95,12 @@
                                         <li><a class="btn btn-default btn-lg active" href="#" >1</a></li>-->
 
                                         <li>
-                                            <a th:if="${detail.number != (detail.totalPages-1)}" th:href="@{'/clazz/detail?pageNum=' + ${detail.number + 1}}" th:text="下一页"></a>
+                                            <a th:if="${detail.number != (detail.totalPages-1)}" th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=' + ${detail.number + 1}}" th:text="下一页"></a>
                                         </li>
                                         <li>
-                                            <a th:if="${detail.number == (detail.totalPages-1)}" th:href="@{'/clazz/detail?pageNum=' + ${detail.totalPages - 1}}" th:text="下一页"></a>
+                                            <a th:if="${detail.number == (detail.totalPages-1)}" th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=' + ${detail.totalPages - 1}}" th:text="下一页"></a>
                                         </li>
-                                        <li><a th:href="@{'/clazz/detail?pageNum='+ ${detail.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum='+ ${detail.totalPages -1 } }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@
                         }
                     },
                     error: function () {
-                        alert("执行错误！");
+                        alert("选课失败！");
                     }
                 });
             } else {

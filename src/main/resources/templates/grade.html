@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common::common_header(~{::title},~{})">
+
+    <title>选课</title>
+
+</head>
+
+<body>
+<!--左侧导航-->
+<div class="lyear-layout-web">
+    <div class="lyear-layout-container">
+        <!--左侧导航-->
+        <div th:replace="~{common/common::sidebar(first='info',second='grade')}"></div>
+        <!--End 左侧导航-->
+
+        <!--头部信息-->
+        <div th:replace="~{common/common::topbar}"></div>
+        <!--End 头部信息-->
+
+        <!--页面主要内容-->
+        <main class="lyear-layout-content">
+
+            <div class="container-fluid">
+
+                <div class="row">
+                    <!-- 可选表 -->
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>本学期考试成绩</h3>
+                            </div>
+
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <!-- 表头 -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">序号</th>
+                                        <th scope="col">学年</th>
+                                        <th scope="col">课程号</th>
+                                        <th scope="col">课程名</th>
+                                        <th scope="col">性质</th>
+                                        <th scope="col">学分</th>
+                                        <th scope="col">成绩</th>
+                                        <th scope="col">补考</th>
+                                        <th scope="col">重修</th>
+                                    </tr>
+                                    </thead>
+                                    <!-- 表格内容 -->
+                                    <tbody id="tbody">
+                                    <tr th:each="grade: ${Grade}">
+                                        <th scope="row" th:text="${gradeStat.index+1 + Grade.size*Grade.number}"></th>
+                                        <td th:text="${grade.year}"></td>
+                                        <td th:text="${grade.term}"></td>
+                                        <td th:text="${grade.cno}"></td>
+                                        <td th:text="${grade.cname}"></td>
+                                        <td th:text="${grade.cnature}"></td>
+                                        <td th:text="${grade.credit}"></td>
+                                        <td th:text="${grade.grade}"></td>
+                                        <td th:text="${grade.bukao}"></td>
+                                        <td th:text="${grade.chongxiu}"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                                <div>
+                                    <ul class="pagination pull-right">
+                                        <li><a th:href="@{'/grade/list?pageNum=0'}">首页</a></li>
+                                        <li>
+                                            <a th:if="${Grade.number != 0}" th:href="@{'/grade/list?pageNum=' + ${Grade.number - 1}}" th:text="上一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Grade.number == 0}" th:href="@{'/grade/list?pageNum=0'}" th:text="上一页"></a>
+                                        </li>
+
+                                        <li>
+                                            <a th:if="${Grade.number != (Grade.totalPages-1)}" th:href="@{'/grade/list?pageNum=' + ${Grade.number + 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li>
+                                            <a th:if="${Grade.number == (Grade.totalPages-1)}" th:href="@{'/grade/list?pageNum=' + ${Grade.totalPages - 1}}" th:text="下一页"></a>
+                                        </li>
+                                        <li><a th:href="@{'/grade/list?pageNum='+ ${Grade.totalPages -1 } }" >尾页</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </main>
+        <!--End 页面主要内容-->
+
+
+    </div>
+</div>
+
+
+<!-- thymeleaf fragment -->
+<div th:replace="common/common::common_js(~{::script})">
+    <script >
+
+
+    </script>
+</div>
+
+</body>
+</html>
