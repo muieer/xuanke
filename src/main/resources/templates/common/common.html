@@ -37,8 +37,8 @@
                                         th:href="@{'/clazz/list'}">必修课课程表</a>
                                 </li>
 <!--                                直接点击无效-->
-                                <li th:class="${second=='bixiu'?'active':''}"><a
-                                        href="javascript:void(0)">必修课授课计划</a>
+                                <li th:class="${second=='bixiu'?'active':''}">
+                                    <a onclick="warningMajor()">必修课授课计划</a>
                                 </li>
                                 <li th:class="${second=='xuanxiu'?'active':''}"><a
                                         th:href="@{'/choose/elective/list'}">选修课授课计划</a></li>
@@ -215,6 +215,10 @@
 
         function warning() {
             alert("暂不支持学生本人修改信息，请联系管理员协助修改！")
+        }
+
+        function warningMajor() {
+            alert("必修课授课计划无法直接查看，请从必修课课程表页面进入，查看对应课程授课计划")
         }
     </script>
     <th:block th:replace="${scripts}"/>
