@@ -47,10 +47,10 @@
                         <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息查询</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"><a
-                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生考试查询</a></li>
-                                <li th:class="${second=='list'?'active':''}"><a
-                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">学生成绩查询</a></li>
+                                <li th:class="${second=='kaoshi'?'active':''}"><a
+                                        th:href="@{'/kaoshi/list'}">学生考试查询</a></li>
+                                <li th:class="${second=='grade'?'active':''}"><a
+                                        th:href="@{'/grade/list'}">学生成绩查询</a></li>
                                 <li th:class="${second=='result'?'active':''}"><a
                                         th:href="@{'/result/list'}">学生选课情况查询</a></li>
                             </ul>
@@ -58,8 +58,7 @@
                         <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息维护</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"><a
-                                        th:href="@{'/'+${#session.getAttribute('sno')}+'/class/list'}">个人信息</a></li>
+                                <li th:class="${second=='list'?'active':''}"><a onclick="warning()">个人信息修改</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -93,7 +92,7 @@
                             <a href="javascript:void(0)" data-toggle="dropdown">
                                 <!--                                改成从cookie中获取学生姓名-->
                                 <span th:id="sno" th:each="cookie :${#httpServletRequest.getCookies()}"
-                                      th:if="${cookie.getName().equals('sname')}" th:text="${cookie.getValue()}">
+                                      th:if="${cookie.getName().equals('sname')}" th:text="'欢迎您：'+${cookie.getValue()+'同学'}">
                                 <span></span> <span class="caret"></span></span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
@@ -212,6 +211,12 @@
     <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/perfect-scrollbar.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
+    <script>
+
+        function warning() {
+            alert("暂不支持学生本人修改信息，请联系管理员协助修改！")
+        }
+    </script>
     <th:block th:replace="${scripts}"/>
 </div>
 
