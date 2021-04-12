@@ -23,7 +23,7 @@ public class KaoShiController {
 
     @GetMapping("/list")
     public String getKaoShiList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
-                                @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                                @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
         Page<KaoShiEntity> page = kaoShiService.getKaoShiEntityListPage(pageNum, size);
 

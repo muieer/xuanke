@@ -24,7 +24,7 @@ public class ChooseController {
     @GetMapping("/elective/list")
 //    @ResponseBody
     public String getPlanEntityList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
-                                    @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                                    @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
 //        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
         Page<PlanEntity> page = chooseService.getPlanEntityListPage(pageNum, size);
