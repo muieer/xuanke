@@ -26,7 +26,7 @@ public class ClazzController {
     //课程表页面
     @GetMapping("/list")
     public String getClazzList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
-                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                               @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
         Page<ClazzEntity> page = clazzService.getClazzEntityListPage(pageNum, size);
         model.addAttribute("Clazz", page);

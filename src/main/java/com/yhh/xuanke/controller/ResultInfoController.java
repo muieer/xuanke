@@ -22,7 +22,7 @@ public class ResultInfoController {
 
     @GetMapping("/list")
     public String chooseResultList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
-                                   @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                                   @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
         //在这要根据学号查询选课结果，不然直接查表会拿到其他学生的选课结果
         Integer sno = StudentIDUtils.getStudentIDFromMap();

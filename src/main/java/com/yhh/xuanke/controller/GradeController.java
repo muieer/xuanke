@@ -23,7 +23,7 @@ public class GradeController {
 
     @GetMapping("/list")
     public String getGradeList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
-                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
+                               @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
         Page<GradeEntity> page = gradeService.getGradeEntityListPage(pageNum, size);
         model.addAttribute("Grade", page);
