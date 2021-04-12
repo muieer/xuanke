@@ -142,15 +142,13 @@
                     data: {
                         pno: getPno(),
                     },
-                    success: function (data) {
-                        if (data == 1) {
-                            alert("提交成功，请到信息查询栏中的学生选课情况查询页面查看选课结果！选课结果以此为准！")
-                            //todo 后期应该思考下此操作是否有必要
-                            location.reload();
+                    success: function (dto) {
+
+                        if(dto.success){
+                            alert(dto.data);
+                        }else{
+                            alert(dto.errMsg);
                         }
-                    },
-                    error: function () {
-                        alert("选课失败！");
                     }
                 });
             } else {

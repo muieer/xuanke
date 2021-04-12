@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.service.ChooseService;
 import org.slf4j.Logger;
@@ -20,6 +21,7 @@ public class ChooseController {
     @Autowired
     private ChooseService chooseService;
 
+    //得到选修课数据
     //默认从第0页开始，一页10条数据
     @GetMapping("/elective/list")
 //    @ResponseBody
@@ -32,11 +34,18 @@ public class ChooseController {
         return "elective";
     }
 
+    //选课
     @PostMapping("/confirm")
     @ResponseBody
-    public String doChoose(Integer pno) {
-        chooseService.doChoose(pno);
-        return "1";
+    public ResultDTO<String> doChoose(Integer pno) {
+
+        try{
+            return chooseService.doChoose(pno);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            return new ResultDTO<>(-1,e.getMessage());
+        }
+
     }
 
 
