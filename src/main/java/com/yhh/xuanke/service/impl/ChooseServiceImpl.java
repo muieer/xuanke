@@ -1,8 +1,12 @@
 package com.yhh.xuanke.service.impl;
 
+import com.github.benmanes.caffeine.cache.Cache;
 import com.google.common.base.Preconditions;
+import com.yhh.xuanke.common.CodeMsg;
+import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
+import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
 import com.yhh.xuanke.service.ChooseService;
@@ -22,6 +26,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ChooseServiceImpl implements ChooseService {
@@ -33,6 +38,10 @@ public class ChooseServiceImpl implements ChooseService {
 
     @Autowired
     private ResultRepository resultRepository;
+
+    //本地缓存
+    @Autowired
+    private Cache<Integer, Boolean> caffeineCache;
 
     /*@Override
     public List<PlanEntity> getPlanEntityList() {
@@ -55,7 +64,7 @@ public class ChooseServiceImpl implements ChooseService {
             List<Predicate> predicates = new ArrayList<>();
 
             //余量需要大于0
-            predicates.add(builder.greaterThan(root.get("num"), 0));
+//todo            predicates.add(builder.greaterThan(root.get("num"), 0));
 
             //只筛选选修课,代码大于0
             predicates.add(builder.greaterThan(root.get("naturecode"),0));
@@ -69,15 +78,31 @@ public class ChooseServiceImpl implements ChooseService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void doChoose(Integer pno) {
+    public ResultDTO<String> doChoose(Integer pno) {
+
+        // 1.本地标记，判断是否有余量
+        Boolean over = caffeineCache.get(pno, (k)->{
+            Boolean flag = caffeineCache.getIfPresent(k);
+            if(flag == null) return false;
+            return flag;
+        });
+
+        LOGGER.info("是否本地缓存中读取：{}", over);
+        //无余量直接返回
+        if(over){
+            throw new GlobalException(CodeMsg.PlAN_OVER);
+        }
+
 
         //todo 待解决上课时间冲突问题
-//        LOGGER.info("得到授课编号{}", pno);
 
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         //先读取此节课的选课结果
         ResultEntity entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
-        Preconditions.checkArgument(entity==null, "重复选课！");
+        if(entity != null){
+            throw new GlobalException(CodeMsg.CHOOSE_REPEAT);
+        }
+//        Preconditions.checkArgument(entity==null, "重复选课！");
 
         //没选课的话会得到null，需new，否则会发生空指针异常
         entity = new ResultEntity();
@@ -87,19 +112,17 @@ public class ChooseServiceImpl implements ChooseService {
         //如果课程已经存在，再次插入不会成功，变成更新语句,事先判断此课是否已经选择
         resultRepository.saveAndFlush(entity);
 
+        //a大于0，说明更新成功，有余量
         Integer a = planRepository.reduceNumByPno(pno);
-        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
+        if(a == 0){
+            //没余量，写入本地缓存中
+            caffeineCache.put(pno, true);
+            throw new GlobalException(CodeMsg.PlAN_OVER);
+        }
 
-        /*//余量减一
-        try{
-            Integer a = planRepository.reduceNumByPno(pno);
+//        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
-            //这一步已经发生异常了，为啥不回滚
-            if(a==0) throw new Exception("减库存失败");
-        }catch (Exception e){
-            LOGGER.error(e.getMessage());
-        }*/
-
-
+        return new ResultDTO<String>(CodeMsg.CHOOSE_END.getMsg());
     }
+
 }

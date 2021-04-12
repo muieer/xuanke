@@ -7,7 +7,7 @@ public class GlobalException extends RuntimeException {
     private final CodeMsg codeMsg;
 
     public GlobalException(CodeMsg codeMsg) {
-        super(codeMsg.toString());
+        super(codeMsg.getMsg());
         this.codeMsg = codeMsg;
     }
 

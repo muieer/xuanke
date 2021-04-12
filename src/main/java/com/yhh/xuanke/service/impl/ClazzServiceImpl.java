@@ -55,7 +55,7 @@ public class ClazzServiceImpl implements ClazzService {
             predicates.add(builder.equal(root.get("cno"), cno));
 
             //余量需要大于0
-            predicates.add(builder.greaterThan(root.get("num"), 0));
+//todo            predicates.add(builder.greaterThan(root.get("num"), 0));
 
 
             return builder.and(predicates.toArray(new Predicate[0]));

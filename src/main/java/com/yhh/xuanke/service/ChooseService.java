@@ -1,5 +1,6 @@
 package com.yhh.xuanke.service;
 
+import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import org.springframework.data.domain.Page;
 
@@ -12,5 +13,5 @@ public interface ChooseService {
 
     Page<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size);
 
-    void doChoose(Integer pno);
+    ResultDTO<String> doChoose(Integer pno);
 }
