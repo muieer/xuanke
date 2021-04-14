@@ -1,6 +1,7 @@
 package com.yhh.xuanke.controller;
 
 import com.yhh.xuanke.dto.ListDTO;
+import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.service.ResultService;
 import com.yhh.xuanke.utils.StudentIDUtils;
@@ -35,10 +36,14 @@ public class ResultInfoController {
 
     @PostMapping("/noChoose")
     @ResponseBody
-    public String noChoose(Integer pno) {
+    public ResultDTO<String> noChoose(Integer pno) {
 
-        resultService.noChoose(pno);
-        return "1";
+        try{
+            return resultService.noChoose(pno);
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            return new ResultDTO<>(-1, e.getMessage());
+        }
     }
 
 }

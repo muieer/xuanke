@@ -10,6 +10,10 @@ public class ListDTO<T> {
     //总页数
     private long totalPages;
 
+    //jackson的反序列化需要无参构造函数
+    public ListDTO() {
+    }
+
     public ListDTO(List<T> list, int number, int size, long totalPages) {
         this.list = list;
         this.number = number;

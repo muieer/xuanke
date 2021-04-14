@@ -8,6 +8,7 @@ import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class KaoShiServiceImpl implements KaoShiService {
     private KaoShiRepository kaoShiRepository;
 
     @Override
+    @Cacheable(cacheNames = "forKaoShi", key = "#pageNum",  cacheManager = "privateInfo")
     public ListDTO<KaoShiEntity> getKaoShiEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum, size);

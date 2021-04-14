@@ -11,6 +11,7 @@ import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
 import com.yhh.xuanke.service.ChooseService;
+import com.yhh.xuanke.service.RedisService;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,9 @@ public class ChooseServiceImpl implements ChooseService {
     @Autowired
     private Cache<Integer, Boolean> caffeineCache;
 
+    @Autowired
+    private RedisService redisService;
+
     /*@Override
     public List<PlanEntity> getPlanEntityList() {
 
@@ -62,14 +66,14 @@ public class ChooseServiceImpl implements ChooseService {
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
 
         //复杂条件查询,只查询余量不为0的课程
-        Page<PlanEntity> page = planRepository.findAll((Specification<PlanEntity>)(root, query, builder)->{
+        Page<PlanEntity> page = planRepository.findAll((Specification<PlanEntity>) (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             //余量需要大于0
 //todo            predicates.add(builder.greaterThan(root.get("num"), 0));
 
             //只筛选选修课,代码大于0
-            predicates.add(builder.greaterThan(root.get("naturecode"),0));
+            predicates.add(builder.greaterThan(root.get("naturecode"), 0));
 
             return builder.and(predicates.toArray(new Predicate[0]));
 
@@ -85,15 +89,15 @@ public class ChooseServiceImpl implements ChooseService {
     public ResultDTO<String> doChoose(Integer pno) {
 
         // 1.本地标记，判断是否有余量
-        Boolean over = caffeineCache.get(pno, (k)->{
+        Boolean over = caffeineCache.get(pno, (k) -> {
             Boolean flag = caffeineCache.getIfPresent(k);
-            if(flag == null) return false;
+            if (flag == null) return false;
             return flag;
         });
 
         LOGGER.info("是否本地缓存中读取：{}", over);
         //无余量直接返回
-        if(over){
+        if (over) {
             throw new GlobalException(CodeMsg.PlAN_OVER);
         }
 
@@ -103,7 +107,7 @@ public class ChooseServiceImpl implements ChooseService {
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         //先读取此节课的选课结果
         ResultEntity entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
-        if(entity != null){
+        if (entity != null) {
             throw new GlobalException(CodeMsg.CHOOSE_REPEAT);
         }
 //        Preconditions.checkArgument(entity==null, "重复选课！");
@@ -118,7 +122,7 @@ public class ChooseServiceImpl implements ChooseService {
 
         //a大于0，说明更新成功，有余量
         Integer a = planRepository.reduceNumByPno(pno);
-        if(a == 0){
+        if (a == 0) {
             //没余量，写入本地缓存中
             caffeineCache.put(pno, true);
             throw new GlobalException(CodeMsg.PlAN_OVER);
@@ -126,7 +130,9 @@ public class ChooseServiceImpl implements ChooseService {
 
 //        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
-        return new ResultDTO<String>(CodeMsg.CHOOSE_END.getMsg());
+        //选课结果发生变化，删掉redis中旧数据
+        redisService.del("forResult:" + sno);
+        return new ResultDTO<>(CodeMsg.CHOOSE_END.getMsg());
     }
 
 }

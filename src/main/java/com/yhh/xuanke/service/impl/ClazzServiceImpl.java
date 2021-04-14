@@ -9,6 +9,7 @@ import com.yhh.xuanke.service.ClazzService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,13 +33,16 @@ public class ClazzServiceImpl implements ClazzService {
     @Autowired
     private PlanRepository planRepository;
 
-    //得到必修课课程
+    //得到必修课课程列表
     @Override
+    @Cacheable(cacheNames = "forClazz", key = "#pageNum", sync = true, cacheManager = "publicInfo")  //名称就是key，必需指定
     public ListDTO<ClazzEntity> getClazzEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum,size);
 
         Page<ClazzEntity> page = clazzRepository.findAll(pageable);
+
+        LOGGER.info("必修课课程数据从数据库加载");
 
         return new ListDTO<ClazzEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }

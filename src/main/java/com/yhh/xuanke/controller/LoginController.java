@@ -5,6 +5,7 @@ import com.yhh.xuanke.common.CodeMsg;
 import com.yhh.xuanke.entiy.StudentEntity;
 import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.repository.StudentRepository;
+import com.yhh.xuanke.service.StudentService;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -30,7 +31,7 @@ public class LoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
     @PostMapping("/do/login")
     @ResponseBody
@@ -41,9 +42,7 @@ public class LoginController {
         LOGGER.info("从前端取得的输入密码{}", password);
 
         //查询学号对应学生的实体类
-        Optional<StudentEntity> optional = studentRepository.findById(sno);
-        Preconditions.checkArgument(optional.isPresent(), "该学生不存在！");
-        StudentEntity student = optional.get();
+        StudentEntity student = studentService.findStudentById(sno);
 
         // 获取当前的subject
         Subject subject = SecurityUtils.getSubject();

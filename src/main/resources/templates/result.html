@@ -135,12 +135,14 @@
                     data: {
                         pno: getPno(),
                     },
-                    success: function (data) {
-                        if (data == 1) {
-                            alert("退选成功！");
+                    success: function (dto) {
+
+                        if(dto.success){
+                            alert(dto.data);
                             //重新加载页面
-                            // location.reload();
                             location.href = "/result/list?pageNum=0";
+                        }else{
+                            alert(dto.errMsg);
                         }
                     },
                     error: function () {

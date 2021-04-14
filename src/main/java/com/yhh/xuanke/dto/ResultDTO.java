@@ -7,6 +7,9 @@ public class ResultDTO<T> {
     private int errCode;
     private String errMsg;
 
+    public ResultDTO() {
+    }
+
     public ResultDTO(T data) {
         this.data = data;
         success = true;
