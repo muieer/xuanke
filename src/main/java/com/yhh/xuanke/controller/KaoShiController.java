@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.KaoShiEntity;
 import com.yhh.xuanke.service.KaoShiService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class KaoShiController {
     public String getKaoShiList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
                                 @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
-        Page<KaoShiEntity> page = kaoShiService.getKaoShiEntityListPage(pageNum, size);
+        ListDTO<KaoShiEntity> page = kaoShiService.getKaoShiEntityListPage(pageNum, size);
 
         model.addAttribute("Kaoshi", page);
 

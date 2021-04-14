@@ -1,5 +1,6 @@
 package com.yhh.xuanke.service.impl;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ClazzEntity;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.repository.ClazzRepository;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ClazzServiceImpl implements ClazzService {
@@ -32,18 +34,18 @@ public class ClazzServiceImpl implements ClazzService {
 
     //得到必修课课程
     @Override
-    public Page<ClazzEntity> getClazzEntityListPage(Integer pageNum, Integer size) {
+    public ListDTO<ClazzEntity> getClazzEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum,size);
 
         Page<ClazzEntity> page = clazzRepository.findAll(pageable);
 
-        return page;
+        return new ListDTO<ClazzEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }
 
     //得到该必修课对应的授课计划
     @Override
-    public Page<PlanEntity> getClazzOfPlanEntityPage(String cno, Integer pageNum, Integer size) {
+    public ListDTO<PlanEntity> getClazzOfPlanEntityPage(String cno, Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
 
@@ -62,6 +64,7 @@ public class ClazzServiceImpl implements ClazzService {
 
         }, pageable);
 
-        return page;
+        return new ListDTO<PlanEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
+
     }
 }

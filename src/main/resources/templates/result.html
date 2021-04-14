@@ -58,7 +58,7 @@
                                         </thead>
                                         <!-- 表格内容 -->
                                         <tbody id="tbody">
-                                        <tr th:each="result:${Result}">
+                                        <tr th:each="result:${Result.list}">
                                             <th scope="row" th:text="${resultStat.index+1+Result.size*Result.number}"></th>
                                             <td th:text="${result.planEntity.cno}"></td>
                                             <td th:text="${result.planEntity.cname}"></td>
@@ -98,7 +98,7 @@
                                         <li>
                                             <a th:if="${Result.number == (Result.totalPages-1)}" th:href="@{'/result/list?pageNum=' + ${Result.totalPages - 1}}" >下一页</a>
                                         </li>
-                                        <li><a th:href="@{'/result/list?pageNum='+ ${Result.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/result/list?pageNum='+ ${Result.totalPages==0? 0:Result.totalPages-1} }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>

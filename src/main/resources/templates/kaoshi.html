@@ -48,7 +48,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="kaoshi: ${Kaoshi}">
+                                    <tr th:each="kaoshi: ${Kaoshi.list}">
                                         <th scope="row" th:text="${kaoshiStat.index+1 + Kaoshi.size*Kaoshi.number}"></th>
                                         <td th:text="${kaoshi.cname}"></td>
                                         <td th:text="${kaoshi.cno}"></td>
@@ -83,7 +83,7 @@
                                         <li>
                                             <a th:if="${Kaoshi.number == (Kaoshi.totalPages-1)}" th:href="@{'/kaoshi/list?pageNum=' + ${Kaoshi.totalPages - 1}}" th:text="下一页"></a>
                                         </li>
-                                        <li><a th:href="@{'/kaoshi/list?pageNum='+ ${Kaoshi.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/kaoshi/list?pageNum='+ ${Kaoshi.totalPages==0 ? 0: Kaoshi.totalPages-1 } }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>

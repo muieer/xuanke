@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.service.ResultService;
 import com.yhh.xuanke.utils.StudentIDUtils;
@@ -27,7 +28,7 @@ public class ResultInfoController {
         //在这要根据学号查询选课结果，不然直接查表会拿到其他学生的选课结果
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         LOGGER.info("取得学生学号 {}", sno);
-        Page<ResultEntity> page = resultService.getResultListPageBySno(pageNum, size, sno);
+        ListDTO<ResultEntity> page = resultService.getResultListPageBySno(pageNum, size, sno);
         model.addAttribute("Result", page);
         return "result";
     }

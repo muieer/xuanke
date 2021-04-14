@@ -55,7 +55,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="clazz: ${Clazz}">
+                                    <tr th:each="clazz: ${Clazz.list}">
                                         <th scope="row" th:text="${clazzStat.index+1 + Clazz.size*Clazz.number}"></th>
                                         <td th:text="${clazz.cname}"></td>
                                         <td th:text="${clazz.cno}"></td>
@@ -92,7 +92,7 @@
                                         <li>
                                             <a th:if="${Clazz.number == (Clazz.totalPages-1)}" th:href="@{'/clazz/list?pageNum=' + ${Clazz.totalPages - 1}}" th:text="下一页"></a>
                                         </li>
-                                        <li><a th:href="@{'/clazz/list?pageNum='+ ${Clazz.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/clazz/list?pageNum='+ ${Clazz.totalPages==0 ? 0: Clazz.totalPages-1 } }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>

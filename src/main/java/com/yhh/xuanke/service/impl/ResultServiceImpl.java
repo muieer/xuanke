@@ -1,6 +1,7 @@
 package com.yhh.xuanke.service.impl;
 
 import com.google.common.base.Preconditions;
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
@@ -21,6 +22,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -40,7 +42,7 @@ public class ResultServiceImpl implements ResultService {
     }*/
 
     @Override
-    public Page<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno) {
+    public ListDTO<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno) {
 
         //分页查询,按选课时间降序排序，目的是看到最新选的课
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by(Sort.Direction.DESC,"createTime"));
@@ -57,7 +59,7 @@ public class ResultServiceImpl implements ResultService {
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
 
-        return page;
+        return new ListDTO<ResultEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }
 
     @Override

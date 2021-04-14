@@ -1,5 +1,6 @@
 package com.yhh.xuanke.service.impl;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.KaoShiEntity;
 import com.yhh.xuanke.repository.KaoShiRepository;
 import com.yhh.xuanke.service.KaoShiService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class KaoShiServiceImpl implements KaoShiService {
@@ -26,7 +28,7 @@ public class KaoShiServiceImpl implements KaoShiService {
     private KaoShiRepository kaoShiRepository;
 
     @Override
-    public Page<KaoShiEntity> getKaoShiEntityListPage(Integer pageNum, Integer size) {
+    public ListDTO<KaoShiEntity> getKaoShiEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum, size);
 
@@ -40,6 +42,6 @@ public class KaoShiServiceImpl implements KaoShiService {
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
 
-        return page;
+        return new ListDTO<KaoShiEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }
 }

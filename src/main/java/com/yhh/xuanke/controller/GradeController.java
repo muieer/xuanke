@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.GradeEntity;
 import com.yhh.xuanke.service.GradeService;
 import org.slf4j.Logger;
@@ -25,7 +26,7 @@ public class GradeController {
     public String getGradeList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
                                @RequestParam(value = "size", defaultValue = "5") Integer size) {
 
-        Page<GradeEntity> page = gradeService.getGradeEntityListPage(pageNum, size);
+        ListDTO<GradeEntity> page = gradeService.getGradeEntityListPage(pageNum, size);
         model.addAttribute("Grade", page);
 
         return "grade";

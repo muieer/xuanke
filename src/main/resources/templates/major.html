@@ -59,7 +59,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="plan: ${detail}">
+                                    <tr th:each="plan: ${detail.list}">
                                         <th scope="row" th:text="${planStat.index+1+detail.size*detail.number}"></th>
                                         <td th:text="${plan.cname}"></td>
                                         <td th:text="${plan.cno}"></td>
@@ -100,7 +100,7 @@
                                         <li>
                                             <a th:if="${detail.number == (detail.totalPages-1)}" th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum=' + ${detail.totalPages - 1}}" th:text="下一页"></a>
                                         </li>
-                                        <li><a th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum='+ ${detail.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/clazz/detail?cno='+${cno}+'&pageNum='+ ${detail.totalPages==0? 0: detail.totalPages-1 } }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>

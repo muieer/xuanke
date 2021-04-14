@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ClazzEntity;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.service.ClazzService;
@@ -28,7 +29,7 @@ public class ClazzController {
     public String getClazzList(Model model, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
                                @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
-        Page<ClazzEntity> page = clazzService.getClazzEntityListPage(pageNum, size);
+        ListDTO<ClazzEntity> page = clazzService.getClazzEntityListPage(pageNum, size);
         model.addAttribute("Clazz", page);
 
         return "clazz";
@@ -44,7 +45,7 @@ public class ClazzController {
             return "major";
         }
 
-        Page<PlanEntity> page = clazzService.getClazzOfPlanEntityPage(cno, pageNum, size);
+        ListDTO<PlanEntity> page = clazzService.getClazzOfPlanEntityPage(cno, pageNum, size);
         model.addAttribute("detail", page);
         //留给选必修课页面分页传参用
         model.addAttribute("cno", cno);
