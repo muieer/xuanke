@@ -1,5 +1,6 @@
 package com.yhh.xuanke.service.impl;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.GradeEntity;
 import com.yhh.xuanke.repository.GradeRepository;
 import com.yhh.xuanke.service.GradeService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GradeServiceImpl implements GradeService {
@@ -26,7 +28,7 @@ public class GradeServiceImpl implements GradeService {
     private GradeRepository gradeRepository;
 
     @Override
-    public Page<GradeEntity> getGradeEntityListPage(Integer pageNum, Integer size) {
+    public ListDTO<GradeEntity> getGradeEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum, size);
 
@@ -40,6 +42,6 @@ public class GradeServiceImpl implements GradeService {
             return builder.and(predicates.toArray(new Predicate[0]));
         },pageable);
 
-        return page;
+        return new ListDTO<>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }
 }

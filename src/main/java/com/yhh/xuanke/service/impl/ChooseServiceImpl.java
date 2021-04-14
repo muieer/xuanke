@@ -3,6 +3,7 @@ package com.yhh.xuanke.service.impl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.google.common.base.Preconditions;
 import com.yhh.xuanke.common.CodeMsg;
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChooseServiceImpl implements ChooseService {
@@ -55,7 +57,7 @@ public class ChooseServiceImpl implements ChooseService {
 
     //实现分页逻辑
     @Override
-    public Page<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size) {
+    public ListDTO<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size) {
 
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
 
@@ -73,7 +75,9 @@ public class ChooseServiceImpl implements ChooseService {
 
         }, pageable);
 
-        return page;
+        ListDTO<PlanEntity> planDto = new ListDTO<>(page.stream().collect(Collectors.toList()), page.getNumber(), size, page.getTotalPages());
+
+        return planDto;
     }
 
     @Override

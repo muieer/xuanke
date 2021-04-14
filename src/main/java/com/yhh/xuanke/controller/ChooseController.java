@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.service.ChooseService;
@@ -29,8 +30,8 @@ public class ChooseController {
                                     @RequestParam(value = "size", defaultValue = "6") Integer size) {
 
 //        List<PlanEntity> planEntityList = chooseService.getPlanEntityList();
-        Page<PlanEntity> page = chooseService.getPlanEntityListPage(pageNum, size);
-        model.addAttribute("Plan", page);
+        ListDTO<PlanEntity> listDTO = chooseService.getPlanEntityListPage(pageNum, size);
+        model.addAttribute("planDto", listDTO);
         return "elective";
     }
 

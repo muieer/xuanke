@@ -49,7 +49,7 @@
                                     </thead>
                                     <!-- 表格内容 -->
                                     <tbody id="tbody">
-                                    <tr th:each="grade: ${Grade}">
+                                    <tr th:each="grade: ${Grade.list}">
                                         <th scope="row" th:text="${gradeStat.index+1 + Grade.size*Grade.number}"></th>
                                         <td th:text="${grade.year}"></td>
                                         <td th:text="${grade.term}"></td>
@@ -80,7 +80,7 @@
                                         <li>
                                             <a th:if="${Grade.number == (Grade.totalPages-1)}" th:href="@{'/grade/list?pageNum=' + ${Grade.totalPages - 1}}" th:text="下一页"></a>
                                         </li>
-                                        <li><a th:href="@{'/grade/list?pageNum='+ ${Grade.totalPages -1 } }" >尾页</a></li>
+                                        <li><a th:href="@{'/grade/list?pageNum='+ ${Grade.totalPages==0 ? 0: Grade.totalPages-1 } }" >尾页</a></li>
                                     </ul>
                                 </div>
                             </div>

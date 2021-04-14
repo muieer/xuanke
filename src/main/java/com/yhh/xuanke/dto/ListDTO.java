@@ -5,14 +5,14 @@ import java.util.List;
 public class ListDTO<T> {
 
     private List<T> list;
-    private int page;
+    private int number;
     private int size;
     //总页数
     private long totalPages;
 
-    public ListDTO(List<T> list, int page, int size, long totalPages) {
+    public ListDTO(List<T> list, int number, int size, long totalPages) {
         this.list = list;
-        this.page = page;
+        this.number = number;
         this.size = size;
         this.totalPages = totalPages;
     }
@@ -25,12 +25,12 @@ public class ListDTO<T> {
         this.list = list;
     }
 
-    public int getPage() {
-        return page;
+    public int getNumber() {
+        return number;
     }
 
-    public void setPage(int page) {
-        this.page = page;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public int getSize() {
@@ -45,7 +45,7 @@ public class ListDTO<T> {
         return totalPages;
     }
 
-    public void setTotalPages(int totalPages) {
+    public void setTotalPages(long totalPages) {
         this.totalPages = totalPages;
     }
 }
