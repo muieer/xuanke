@@ -36,11 +36,6 @@ spring:
         min-idle: 0
     timeout: 1000
 
-  cache:
-    redis:
-      key-prefix: xk
-
-
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
