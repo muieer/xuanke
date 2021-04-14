@@ -44,7 +44,7 @@ public class ChooseController {
             return chooseService.doChoose(pno);
         }catch (Exception e){
             LOGGER.error(e.getMessage(), e);
-            return new ResultDTO<>(-1,e.getMessage());
+            return new ResultDTO<>(-1, e.getMessage());
         }
 
     }
