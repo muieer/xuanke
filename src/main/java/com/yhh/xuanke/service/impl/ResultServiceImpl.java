@@ -72,7 +72,7 @@ public class ResultServiceImpl implements ResultService {
         listDTO = new ListDTO<ResultEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
 
         //加载到redis中
-        redisService.setToHash("forResult:" + sno, sno + "-" + pageNum, listDTO, 30, TimeUnit.MINUTES);
+        redisService.setToHash("forResult::" + sno, sno + "-" + pageNum, listDTO, 30, TimeUnit.MINUTES);
         LOGGER.info("从数据中加载选课结果，并将选课结果写入redis中");
         return listDTO;
     }
@@ -102,7 +102,7 @@ public class ResultServiceImpl implements ResultService {
 //        Preconditions.checkArgument(a != 0, "余量不能大于容量");
 
         //选课内容发生变化，删除redis中旧有数据
-        redisService.del("forResult:" + StudentIDUtils.getStudentIDFromMap());
+        redisService.del("forResult::" + StudentIDUtils.getStudentIDFromMap());
 
         return new ResultDTO<>(CodeMsg.RESULT_NO_CHOOSE_SUCCESS.getMsg());
     }

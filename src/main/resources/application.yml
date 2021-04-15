@@ -47,5 +47,5 @@ spring:
 logging:
   file:
     name: run.log
-    max-size: 1MB
+    max-size: 10MB
     max-history: 7

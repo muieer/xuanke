@@ -47,7 +47,7 @@ public class StudentIDUtils {
         //日志证明每次拿到的subject都不同，此法可用
         Subject subject = SecurityUtils.getSubject();
         String id = (String) subject.getSession().getId();
-        LOGGER.info("得到sessionID {}", id);
+        LOGGER.info("存入sessionID {}", id);
         map.put(id, sno);
     }
 

@@ -131,7 +131,7 @@ public class ChooseServiceImpl implements ChooseService {
 //        Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
         //选课结果发生变化，删掉redis中旧数据
-        redisService.del("forResult:" + sno);
+        redisService.del("forResult::" + sno);
         return new ResultDTO<>(CodeMsg.CHOOSE_END.getMsg());
     }
 
