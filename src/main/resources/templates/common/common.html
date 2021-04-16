@@ -38,10 +38,12 @@
                                 </li>
 <!--                                直接点击无效-->
                                 <li th:class="${second=='bixiu'?'active':''}">
-                                    <a onclick="warningMajor()">必修课授课计划</a>
+                                    <a onclick="warningForMajor()">必修课授课计划</a>
                                 </li>
                                 <li th:class="${second=='xuanxiu'?'active':''}"><a
-                                        th:href="@{'/choose/elective/list'}">选修课授课计划</a></li>
+                                        onclick="warningForElective()">选修课授课计划</a></li>
+                                <!--<li th:class="${second=='xuanxiu'?'active':''}"><a
+                                        th:href="@{'/choose/elective/list'}" onclick="warningForElective()">选修课授课计划</a></li>-->
                             </ul>
                         </li>
                         <li th:class="${first=='info'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
@@ -58,7 +60,7 @@
                         <li th:class="${first=='teach'?'nav-item nav-item-has-subnav open active':'nav-item nav-item-has-subnav open active'}">
                             <a href="javascript:void(0)"><i class="mdi mdi-book-open-page-variant"></i> 信息维护</a>
                             <ul class="nav nav-subnav">
-                                <li th:class="${second=='list'?'active':''}"><a onclick="warning()">个人信息修改</a></li>
+                                <li th:class="${second=='list'?'active':''}"><a onclick="warningForInfoFix()">个人信息修改</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -213,12 +215,17 @@
     <script type="text/javascript" th:src="@{/js/main.min.js}"></script>
     <script>
 
-        function warning() {
+        function warningForInfoFix() {
             alert("暂不支持学生本人修改信息，请联系管理员协助修改！")
         }
 
-        function warningMajor() {
-            alert("必修课授课计划无法直接查看，请从必修课课程表页面进入，查看对应课程授课计划")
+        function warningForMajor() {
+            alert("必修课授课计划无法直接查看，请从必修课课程表页面进入，查看对应课程授课计划！")
+        }
+
+        function warningForElective() {
+            alert("请注意：选修课课程余量显示存在1分钟延迟，具体选课结果以【学生选课情况查询】显示为准！");
+            location.href = "/choose/elective/list"
         }
     </script>
     <th:block th:replace="${scripts}"/>

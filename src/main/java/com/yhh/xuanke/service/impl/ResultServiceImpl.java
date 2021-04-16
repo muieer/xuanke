@@ -1,6 +1,5 @@
 package com.yhh.xuanke.service.impl;
 
-import com.google.common.base.Preconditions;
 import com.yhh.xuanke.common.CodeMsg;
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
@@ -8,9 +7,8 @@ import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
-import com.yhh.xuanke.service.RedisService;
+import com.yhh.xuanke.redis.RedisService;
 import com.yhh.xuanke.service.ResultService;
-import com.yhh.xuanke.utils.RedisUtil;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -47,7 +44,7 @@ public class ResultServiceImpl implements ResultService {
     @Override
     public ListDTO<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno) {
 
-        ListDTO<ResultEntity> listDTO = (ListDTO<ResultEntity>) redisService.getFromHash("forResult:" + sno, sno + "-" + pageNum);
+        ListDTO<ResultEntity> listDTO = (ListDTO<ResultEntity>) redisService.getFromHash("forResultList::" + sno, sno + "-" + pageNum);
 
         if (listDTO != null) {
             LOGGER.info("从redis中加载选课结果");
@@ -72,7 +69,7 @@ public class ResultServiceImpl implements ResultService {
         listDTO = new ListDTO<ResultEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
 
         //加载到redis中
-        redisService.setToHash("forResult:" + sno, sno + "-" + pageNum, listDTO, 30, TimeUnit.MINUTES);
+        redisService.setToHash("forResultList::" + sno, sno + "-" + pageNum, listDTO, 30, TimeUnit.MINUTES);
         LOGGER.info("从数据中加载选课结果，并将选课结果写入redis中");
         return listDTO;
     }
@@ -81,15 +78,16 @@ public class ResultServiceImpl implements ResultService {
     @Transactional(rollbackFor = Exception.class)
     public ResultDTO<String> noChoose(Integer pno) {
 
+        Integer sno = StudentIDUtils.getStudentIDFromMap();
+
         //为啥突然拿不到授课编号了，头疼，头大，难顶
         LOGGER.info("得到授课编号{}", pno);
         //原因：前端参数名称写错了，要仔细啊
 
-        ResultEntity resultEntity = resultRepository.findResultEntityByPnoAndSno(pno, StudentIDUtils.getStudentIDFromMap());
+        ResultEntity resultEntity = findResultEntityByPnoAndSno(pno, sno);
         if(resultEntity == null){
             throw new GlobalException(CodeMsg.RESULT_NOT_EXIST);
         }
-//        Preconditions.checkArgument(resultEntity != null, "没有该条选课记录");
 
         //选课结果表删除掉该条选课记录
         resultRepository.delete(resultEntity);
@@ -99,11 +97,32 @@ public class ResultServiceImpl implements ResultService {
         if(a == 0){
             throw new GlobalException(CodeMsg.PLAN_NUM_ERROR);
         }
-//        Preconditions.checkArgument(a != 0, "余量不能大于容量");
+
+        //redis中对应的课程余量加一
+        redisService.hdecr("forPlan", String.valueOf(pno), -1);
+
+        //删除选课记录中此条选课结果
+        redisService.delFromHash("forResult", sno+"-"+pno);
 
         //选课内容发生变化，删除redis中旧有数据
-        redisService.del("forResult:" + StudentIDUtils.getStudentIDFromMap());
+        redisService.del("forResultList::" + sno);
 
         return new ResultDTO<>(CodeMsg.RESULT_NO_CHOOSE_SUCCESS.getMsg());
+    }
+
+    @Override
+    public ResultEntity findResultEntityByPnoAndSno(Integer pno, Integer sno) {
+
+        ResultEntity entity ;
+
+        //从redis中得到是否有对应选课记录
+        entity = (ResultEntity) redisService.getFromHash("forResult", sno+"-"+pno);
+        if( entity!=null ) return entity;
+
+        entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
+        if(entity != null){
+            redisService.setToHash("forResult", sno+"-"+pno, entity, 30, TimeUnit.MINUTES);
+        }
+        return entity;
     }
 }

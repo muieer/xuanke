@@ -13,7 +13,7 @@ public class CaffeineConfig {
     @Bean
     public Cache<Integer, Boolean> caffeineCache() {
         return Caffeine.newBuilder()
-                .expireAfterWrite(30, TimeUnit.MINUTES)
+                .expireAfterWrite(1, TimeUnit.DAYS)
                 .initialCapacity(100)
                 //缓存最大条数
                 .maximumSize(1000)

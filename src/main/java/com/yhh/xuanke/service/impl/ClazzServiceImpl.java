@@ -3,6 +3,7 @@ package com.yhh.xuanke.service.impl;
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.ClazzEntity;
 import com.yhh.xuanke.entiy.PlanEntity;
+import com.yhh.xuanke.redis.RedisService;
 import com.yhh.xuanke.repository.ClazzRepository;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.service.ClazzService;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +34,9 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Autowired
     private PlanRepository planRepository;
+
+    @Autowired
+    private RedisService redisService;
 
     //得到必修课课程列表
     @Override
@@ -51,6 +56,9 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public ListDTO<PlanEntity> getClazzOfPlanEntityPage(String cno, Integer pageNum, Integer size) {
 
+        ListDTO<PlanEntity> listDTO = (ListDTO<PlanEntity>) redisService.getFromHash("forMajor", cno+"-"+pageNum);
+        if(listDTO!=null) return listDTO;
+
         Pageable pageable = PageRequest.of(pageNum, size, Sort.by("pno"));
 
         //复杂条件查询,只查询余量不为0的课程
@@ -61,14 +69,17 @@ public class ClazzServiceImpl implements ClazzService {
             predicates.add(builder.equal(root.get("cno"), cno));
 
             //余量需要大于0
-//todo            predicates.add(builder.greaterThan(root.get("num"), 0));
+            predicates.add(builder.greaterThan(root.get("num"), 0));
 
 
             return builder.and(predicates.toArray(new Predicate[0]));
 
         }, pageable);
 
-        return new ListDTO<PlanEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
+        listDTO = new ListDTO<PlanEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
+        redisService.setToHash("forMajor", cno+"-"+pageNum, listDTO, 1, TimeUnit.MINUTES);
+
+        return listDTO;
 
     }
 }

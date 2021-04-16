@@ -47,14 +47,14 @@ public class StudentIDUtils {
         //日志证明每次拿到的subject都不同，此法可用
         Subject subject = SecurityUtils.getSubject();
         String id = (String) subject.getSession().getId();
-        LOGGER.info("得到sessionID {}", id);
+        LOGGER.info("根据sessionID {} 将学号存入map", id);
         map.put(id, sno);
     }
 
     public static Integer getStudentIDFromMap() {
         Subject subject = SecurityUtils.getSubject();
         String id = (String) subject.getSession().getId();
-        LOGGER.info("得到sessionID {}", id);
+        LOGGER.info("根据sessionID {} 从map中获得学号", id);
         return map.get(id);
     }
 
