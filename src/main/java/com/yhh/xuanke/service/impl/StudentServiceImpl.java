@@ -3,12 +3,11 @@ package com.yhh.xuanke.service.impl;
 import com.google.common.base.Preconditions;
 import com.yhh.xuanke.entiy.StudentEntity;
 import com.yhh.xuanke.repository.StudentRepository;
-import com.yhh.xuanke.service.RedisService;
+import com.yhh.xuanke.redis.RedisService;
 import com.yhh.xuanke.service.StudentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -3,7 +3,6 @@ package com.yhh.xuanke.service;
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.ResultEntity;
-import org.springframework.data.domain.Page;
 
 
 public interface ResultService {
@@ -15,4 +14,6 @@ public interface ResultService {
     ListDTO<ResultEntity> getResultListPageBySno(Integer pageNum, Integer size, Integer sno);
 
     ResultDTO<String> noChoose(Integer pno);
+
+    ResultEntity findResultEntityByPnoAndSno(Integer pno, Integer sno);
 }

@@ -2,6 +2,7 @@ package com.yhh.xuanke.service.impl;
 
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.entiy.KaoShiEntity;
+import com.yhh.xuanke.redis.RedisService;
 import com.yhh.xuanke.repository.KaoShiRepository;
 import com.yhh.xuanke.service.KaoShiService;
 import com.yhh.xuanke.utils.StudentIDUtils;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +30,18 @@ public class KaoShiServiceImpl implements KaoShiService {
     @Autowired
     private KaoShiRepository kaoShiRepository;
 
+    @Autowired
+    private RedisService redisService;
+
     @Override
-    @Cacheable(cacheNames = "forKaoShi", key = "#pageNum",  cacheManager = "privateInfo")
+//    @Cacheable(cacheNames = "forKaoShi", key = "#pageNum",  cacheManager = "privateInfo")
     public ListDTO<KaoShiEntity> getKaoShiEntityListPage(Integer pageNum, Integer size) {
+
+        Integer sno = StudentIDUtils.getStudentIDFromMap();
+        ListDTO<KaoShiEntity> listDTO = (ListDTO<KaoShiEntity>)redisService.getFromHash("forKaoShi", sno+"-"+pageNum);
+        if(listDTO!=null){
+            return  listDTO;
+        }
 
         Pageable pageable = PageRequest.of(pageNum, size);
 
@@ -44,6 +55,9 @@ public class KaoShiServiceImpl implements KaoShiService {
             return builder.and(predicates.toArray(new Predicate[0]));
         }, pageable);
 
-        return new ListDTO<KaoShiEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
+        listDTO = new ListDTO<KaoShiEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
+        redisService.setToHash("forKaoShi", sno+"-"+pageNum, listDTO, 30, TimeUnit.MINUTES);
+
+        return listDTO;
     }
 }

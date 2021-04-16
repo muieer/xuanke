@@ -1,10 +1,8 @@
 package com.yhh.xuanke.controller;
 
-import com.google.common.base.Preconditions;
 import com.yhh.xuanke.common.CodeMsg;
 import com.yhh.xuanke.entiy.StudentEntity;
 import com.yhh.xuanke.exception.GlobalException;
-import com.yhh.xuanke.repository.StudentRepository;
 import com.yhh.xuanke.service.StudentService;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.apache.shiro.SecurityUtils;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 
 @Controller
 public class LoginController {
@@ -60,11 +57,10 @@ public class LoginController {
 
             //得到session过期时间
             long timeout = subject.getSession().getTimeout();
-
             //将学生姓名添加到cookie中
             addCookie("sname", student.getSname(), timeout, response);
-
             LOGGER.info("do login result ==> " + msg);
+
             return msg;
         } catch (UnknownAccountException e) {
             LOGGER.warn("do login result ==> " + CodeMsg.STUDENT_NUM_NOT_EXISTS.getMsg());
@@ -81,20 +77,24 @@ public class LoginController {
 
     @GetMapping("/logout")
     public String logout() {
+
         Subject subject = SecurityUtils.getSubject();
         // 登出
         StudentIDUtils.removeUserIdFromMap();
-        subject.logout();
         LOGGER.info("User " + subject.getPrincipal() + " logout.");
+        subject.logout();
+
         return "redirect:/home";
     }
 
     private void addCookie(String key, String value, long timeout, HttpServletResponse response) {
+
         Cookie cookie = new Cookie(key, value);
         //这个必须要设置
         cookie.setPath("/");
         cookie.setMaxAge((int) timeout);
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
+
     }
 }

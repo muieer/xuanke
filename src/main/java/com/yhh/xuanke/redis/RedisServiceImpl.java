@@ -1,6 +1,5 @@
-package com.yhh.xuanke.service.impl;
+package com.yhh.xuanke.redis;
 
-import com.yhh.xuanke.service.RedisService;
 import com.yhh.xuanke.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,12 +44,52 @@ public class RedisServiceImpl implements RedisService {
     }
 
     @Override
+    public void delFromHash(String key, String hashKey) {
+
+        redisUtil.hdel(key, hashKey);
+    }
+
+    @Override
+    public Boolean hHasKey(String key, String hashKey) {
+
+        return redisUtil.hHasKey(key, hashKey);
+    }
+
+    @Override
     public void del(String... key) {
 
         redisUtil.del(key);
     }
 
+    @Override
+    public Long hdecr(String key, String item, long by) {
 
+        return redisUtil.hdecr(key, item, by);
+    }
+
+    @Override
+    public Boolean hasKey(String key) {
+
+        return redisUtil.hasKey(key);
+    }
+
+    @Override
+    public void setToSet(String key, long time, TimeUnit timeUnit, Object value) {
+
+        redisUtil.sSetAndTime(key, time, timeUnit, value);
+    }
+
+    @Override
+    public Boolean sHasKey(String key, Object value) {
+
+        return redisUtil.sHasKey(key, value);
+    }
+
+    @Override
+    public void delFromSet(String key, Object value) {
+
+        redisUtil.setRemove(key, value);
+    }
 
 
 }

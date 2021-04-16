@@ -36,6 +36,28 @@ spring:
         min-idle: 0
     timeout: 1000
 
+  rabbitmq:
+    host: localhost
+    username: guest
+    password: guest
+    port: 5672
+#   开启发送确认
+    publisher-confirm-type: CORRELATED
+#   开启发送return模式
+    publisher-returns: true
+    connection-timeout: 3000
+
+    template:
+#     配合return机制使用，表示接收路由不可达的消息
+      mandatory: true
+
+    listener:
+      direct:
+#        手动ack
+        acknowledge-mode: manual
+        retry:
+          enabled: true
+
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
@@ -44,8 +66,12 @@ spring:
     encoding: UTF-8
     mode: HTML
 
-logging:
-  file:
-    name: run.log
-    max-size: 10MB
-    max-history: 7
+  aop:
+#    开启cglib做动态代理
+    proxy-target-class: true
+
+#logging:
+#  file:
+#    name: run.log
+#    max-size: 10MB
+#    max-history: 7

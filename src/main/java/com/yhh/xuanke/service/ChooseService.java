@@ -15,4 +15,6 @@ public interface ChooseService {
     ListDTO<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size);
 
     ResultDTO<String> doChoose(Integer pno);
+
+    void executeChoose(Integer sno, Integer pno);
 }

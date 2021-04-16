@@ -8,7 +8,6 @@ import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +30,9 @@ public class ResultInfoController {
         LOGGER.info("取得学生学号 {}", sno);
         ListDTO<ResultEntity> page = resultService.getResultListPageBySno(pageNum, size, sno);
         model.addAttribute("Result", page);
+
         return "result";
+
     }
 
     @PostMapping("/noChoose")
@@ -44,6 +45,7 @@ public class ResultInfoController {
             LOGGER.error(e.getMessage(), e);
             return new ResultDTO<>(-1, e.getMessage());
         }
+
     }
 
 }

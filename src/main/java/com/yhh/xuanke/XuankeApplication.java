@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class XuankeApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(XuankeApplication.class, args);
     }
 

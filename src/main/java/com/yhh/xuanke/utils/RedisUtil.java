@@ -293,7 +293,7 @@ public class RedisUtil {
      * @param item 项
      * @param by   要增加几(大于0)
      */
-    public double hincr(String key, String item, double by) {
+    public double hincr(String key, String item, long by) {
         return redisTemplate.opsForHash().increment(key, item, by);
     }
 
@@ -305,7 +305,7 @@ public class RedisUtil {
      * @param item 项
      * @param by   要减少记(小于0)
      */
-    public double hdecr(String key, String item, double by) {
+    public Long hdecr(String key, String item, long by) {
         return redisTemplate.opsForHash().increment(key, item, -by);
     }
 
