@@ -135,28 +135,46 @@
         }
 
         $('#confirm').click(function () {
+            let pno = getPno();
             if (confirm("是否确认选择此节课，请谨慎考虑！")) {
                 $.ajax({
-                    url: "/choose/confirm",
+                    url: "/choose/exposer",
                     type: "POST",
+                    async: false,
                     data: {
-                        pno: getPno(),
+                        pno: pno
                     },
                     success: function (dto) {
-
                         if(dto.success){
-                            alert(dto.data);
+                            $.ajax({
+                                url: "/choose/confirm",
+                                type: "POST",
+                                async: false,
+                                data: {
+                                    pno: pno,
+                                    md5: dto.data
+                                },
+                                success: function (dto) {
+
+                                    if(dto.success){
+                                        alert(dto.data);
+                                    }else{
+                                        alert(dto.errMsg);
+                                    }
+                                },
+                                error: function () {
+                                    alert("执行错误");
+                                }
+                            });
                         }else{
                             alert(dto.errMsg);
                         }
                     },
-                    error: function () {
-                        alert("执行错误");
-                    }
-                });
+                })
+
             } else {
                 //刷新，得到最新的课程余量
-                location.reload();
+                // location.reload();
             }
 
 

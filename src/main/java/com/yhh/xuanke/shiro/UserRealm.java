@@ -40,7 +40,7 @@ public class UserRealm extends AuthorizingRealm {
             return null;
         }
 
-        LOGGER.info("从数据库取得用户密码{}", student.getPassword());
+//        LOGGER.info("从数据库取得用户密码{}", student.getPassword());
 
         return new SimpleAuthenticationInfo(student, student.getPassword(),
                 ByteSource.Util.bytes(student.getSalt()), "");
