@@ -37,7 +37,7 @@ public class ResultInfoController {
 
     @PostMapping("/noChoose")
     @ResponseBody
-    public ResultDTO<String> noChoose(Integer pno) {
+    public ResultDTO<String> noChoose(@RequestParam(name = "pno") Integer pno) {
 
         try{
             return resultService.noChoose(pno);

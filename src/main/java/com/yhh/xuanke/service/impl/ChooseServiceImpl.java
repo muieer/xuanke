@@ -3,17 +3,21 @@ package com.yhh.xuanke.service.impl;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.google.common.base.Preconditions;
 import com.yhh.xuanke.common.CodeMsg;
+import com.yhh.xuanke.dto.ExposerDTO;
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
+import com.yhh.xuanke.entiy.ChooseTimeEntity;
 import com.yhh.xuanke.entiy.PlanEntity;
 import com.yhh.xuanke.entiy.ResultEntity;
 import com.yhh.xuanke.exception.GlobalException;
 import com.yhh.xuanke.rabbitmq.MQSender;
+import com.yhh.xuanke.repository.ChooseTimeRepository;
 import com.yhh.xuanke.repository.PlanRepository;
 import com.yhh.xuanke.repository.ResultRepository;
 import com.yhh.xuanke.service.ChooseService;
 import com.yhh.xuanke.redis.RedisService;
 import com.yhh.xuanke.service.ResultService;
+import com.yhh.xuanke.utils.MD5Util;
 import com.yhh.xuanke.utils.StudentIDUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,7 @@ import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -58,12 +63,14 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
     @Autowired
     private ResultService resultService;
 
+    @Autowired
+    private ChooseTimeRepository chooseTimeRepository;
+
 
     //实现分页逻辑
     @Override
     public ListDTO<PlanEntity> getPlanEntityListPage(Integer pageNum, Integer size) {
 
-        //
         ListDTO<PlanEntity> listDTO = (ListDTO<PlanEntity>)redisService.getFromHash("forXuanXiu", String.valueOf(pageNum));
         if(listDTO != null) return listDTO;
 
@@ -91,7 +98,41 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
     }
 
     @Override
-    public ResultDTO<String> doChoose(Integer pno) {
+    public ExposerDTO exposer(Integer pno) {
+        //先判断是否有此课程
+        Boolean flag = redisService.hHasKey("forPlan", String.valueOf(pno));
+        //该课程不存在，
+        if(!flag) {
+            throw new GlobalException(CodeMsg.NO_PLAN);
+        }
+
+        //mysql默认时间不是东八区，需要到数据库修改时区
+        Date nowTime = new Date();
+//        LOGGER.info("当下时间是{}", nowTime.toString());
+        Date startTime = (Date)redisService.get("start", "time");
+//        LOGGER.info("开始时间是{}", startTime.toString());
+        Date endTime = (Date)redisService.get("end", "time");
+//        LOGGER.info("结束时间是{}", endTime.toString());
+        if(nowTime.getTime() < startTime.getTime()){
+            throw new GlobalException(CodeMsg.LESS_START_TIME);
+        }
+
+        if(nowTime.getTime() > endTime.getTime()){
+            throw new GlobalException(CodeMsg.TIME_END);
+        }
+
+        String md5 = MD5Util.inputPassToFormPass(String.valueOf(pno));
+
+        return new ExposerDTO(true, md5);
+    }
+
+    @Override
+    public ResultDTO<String> doChoose(Integer pno, String md5) {
+
+        //0.先判断链接是否正确
+        if(md5==null || !md5.equals(MD5Util.inputPassToFormPass(String.valueOf(pno)))){
+            throw new GlobalException(CodeMsg.LINK_ERROR);
+        }
 
         // 1.本地标记，判断是否有余量
         Boolean over = caffeineCache.get(pno, (k) -> {
@@ -174,8 +215,15 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
         for(PlanEntity entity: list){
             redisService.setToHash("forPlan", String.valueOf(entity.getPno()),
-                    entity.getNum(), 12, TimeUnit.HOURS);
+                    entity.getNum(), 1, TimeUnit.DAYS);
         }
+
+        //将选课开启结束时间主动加载进redis
+        Optional<ChooseTimeEntity> optional = chooseTimeRepository.findById(1);
+        Preconditions.checkArgument(optional.isPresent() == true, "数据库加载错误");
+        ChooseTimeEntity entity = optional.get();
+        redisService.set("start", "time", entity.getStartTime(), 1, TimeUnit.DAYS);
+        redisService.set("end", "time", entity.getEndTime(), 1, TimeUnit.DAYS);
 
     }
 

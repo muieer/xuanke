@@ -1,5 +1,6 @@
 package com.yhh.xuanke.controller;
 
+import com.yhh.xuanke.dto.ExposerDTO;
 import com.yhh.xuanke.dto.ListDTO;
 import com.yhh.xuanke.dto.ResultDTO;
 import com.yhh.xuanke.entiy.PlanEntity;
@@ -32,13 +33,26 @@ public class ChooseController {
         return "elective";
     }
 
+    @PostMapping("/exposer")
+    @ResponseBody
+    private ResultDTO<String> exposer(@RequestParam(value = "pno")Integer pno){
+
+        try{
+            ExposerDTO exposer = chooseService.exposer(pno);
+            return new ResultDTO<>(exposer.getMd5());
+        }catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            return new ResultDTO<>(-1, e.getMessage());
+        }
+    }
+
     //选课
     @PostMapping("/confirm")
     @ResponseBody
-    public ResultDTO<String> doChoose(Integer pno) {
+    public ResultDTO<String> doChoose(@RequestParam(value = "pno")Integer pno, @RequestParam(value = "md5")String md5) {
 
         try{
-            return chooseService.doChoose(pno);
+            return chooseService.doChoose(pno, md5);
         }catch (Exception e){
             LOGGER.error(e.getMessage(), e);
             return new ResultDTO<>(-1, e.getMessage());
