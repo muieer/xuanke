@@ -35,4 +35,12 @@ public class ChooseTimeEntity {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
+
+    public Integer getTid() {
+        return tid;
+    }
+
+    public void setTid(Integer tid) {
+        this.tid = tid;
+    }
 }
