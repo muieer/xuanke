@@ -130,11 +130,11 @@
         $('#noChoose').click(function () {
             if (confirm("再次确认是否要真的退选,请谨慎考虑！")) {
                 $.ajax({
-                    url: "/result/noChoose",
+                    url: "/result/" + getPno() + "/noChoose",
                     type: "POST",
-                    data: {
+                    /*data: {
                         pno: getPno(),
-                    },
+                    },*/
                     success: function (dto) {
 
                         if(dto.success){

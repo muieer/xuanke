@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -35,8 +36,8 @@ public class ClazzController {
     }
 
     //跳转到每个课程对应的详细授课计划
-    @GetMapping("/detail")
-    public String getClazzDetail(Model model, String cno, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
+    @GetMapping("/{cno}/detail")
+    public String getClazzDetail(Model model, @PathVariable(name = "cno") String cno, @RequestParam(value = "pageNum", defaultValue = "0")Integer pageNum,
                                  @RequestParam(value = "size", defaultValue = "10") Integer size) {
 
         if(cno == null){
