@@ -9,6 +9,7 @@ public enum CodeMsg {
     CHOOSE_END(1, "提交成功，请到信息查询栏中的学生选课情况查询页面查看选课结果！选课结果以此为准！"),
     CHOOSE_REPEAT(-2, "重复选课！"),
 
+    COUNT_OVER(-1, "频繁请求，请稍后再试！"),
     NO_PLAN(-1, "授课计划不存在！"),
     LESS_START_TIME(-1, "尚未到选课时间！"),
     TIME_END(-1, "选课已经结束！"),
