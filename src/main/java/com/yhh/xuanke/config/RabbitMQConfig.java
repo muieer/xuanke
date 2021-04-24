@@ -38,9 +38,9 @@ public class RabbitMQConfig {
         //开启消息确认 yml 需要配置 publisher-confirm
         rabbitTemplate.setConfirmCallback((correlationData, ack, cause)->{
             if (ack) {
-                LOGGER.info("消息发送到交换机成功,correlationId:{}",correlationData.getId());
+                LOGGER.info("消息发送到交换机成功,correlationId:{}", correlationData.getId());
             } else {
-                LOGGER.info("消息发送到交换机失败,原因:{}",cause);
+                LOGGER.info("消息发送到交换机失败,原因:{}", cause);
             }
         });
 

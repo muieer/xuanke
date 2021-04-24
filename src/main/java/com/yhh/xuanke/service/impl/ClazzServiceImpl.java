@@ -47,7 +47,7 @@ public class ClazzServiceImpl implements ClazzService {
 
         Page<ClazzEntity> page = clazzRepository.findAll(pageable);
 
-        LOGGER.info("必修课课程数据从数据库加载");
+//        LOGGER.info("必修课课程数据从数据库加载");
 
         return new ListDTO<ClazzEntity>(page.stream().collect(Collectors.toList()), pageNum, size, page.getTotalPages());
     }

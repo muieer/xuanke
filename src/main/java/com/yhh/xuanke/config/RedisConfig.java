@@ -35,11 +35,9 @@ public class RedisConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer()));
 //                .disableCachingNullValues(); 如果是空值不缓存
 
-        RedisCacheManager cacheManager = RedisCacheManager.builder(redisConnectionFactory)
+        return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(configuration)
                 .build();
-
-        return cacheManager;
     }
 
     @Bean(name = "privateInfo") //用在私有信息的缓存，类似个人考试信息、成绩信息，每个人不同，只短暂看个几次
@@ -51,11 +49,9 @@ public class RedisConfig {
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(valueSerializer()));
 //                .disableCachingNullValues(); 如果是空值不缓存
 
-        RedisCacheManager cacheManager = RedisCacheManager.builder(redisConnectionFactory)
+        return RedisCacheManager.builder(redisConnectionFactory)
                 .cacheDefaults(configuration)
                 .build();
-
-        return cacheManager;
     }
 
     @Bean

@@ -152,11 +152,10 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
         //无余量直接返回
         if (over) {
-            LOGGER.info("通过本地标记判断已无余量");
+//            LOGGER.info("通过本地标记判断已无余量");
             throw new GlobalException(CodeMsg.PlAN_OVER);
         }
 
-        //todo 待解决上课时间冲突问题
         //2.判断是否重选
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         // 先读取此节课的选课结果
@@ -175,6 +174,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
             }
         }
 
+        //4.库存预减
         //如果key不存在，会写入并返回-1,需先判断
         if(!redisService.hasKey("forPlanCount")){
             try {
@@ -187,16 +187,18 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         }
 
         Long num = redisService.hdecr("forPlanCount", String.valueOf(pno), 1);
-        LOGGER.info("redis中读取pno={} 的授课计划余量为{}", pno, num);
+//        LOGGER.info("redis中读取pno={} 的授课计划余量为{}", pno, num);
         if(num < 0){
             //没余量，写入本地缓存中
             caffeineCache.put(pno, true);
             throw new GlobalException(CodeMsg.PlAN_OVER);
         }
 
+        //5。
         //选课请求发送给mq
         mqSender.send(sno, pno);
 
+        //6。返回结果
         return new ResultDTO<>(CodeMsg.CHOOSE_END.getMsg());
     }
 
@@ -244,7 +246,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
         //将选课开启结束时间主动加载进redis
         Optional<ChooseTimeEntity> optional = chooseTimeRepository.findById(1);
-        Preconditions.checkArgument(optional.isPresent() == true, "数据库加载错误");
+        Preconditions.checkArgument(optional.isPresent(), "数据库加载错误");
         ChooseTimeEntity entity = optional.get();
         redisService.set("start", "time", entity.getStartTime(), 1, TimeUnit.DAYS);
         redisService.set("end", "time", entity.getEndTime(), 1, TimeUnit.DAYS);
@@ -267,7 +269,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
         String tWeek = splitT[0];
         String fWeek = splitF[0];
-        if(tWeek.equals(fWeek)) return true;
+        if(!tWeek.equals(fWeek)) return false;
 
         String[] split = splitT[1].split("-");
         Integer startT = Integer.valueOf(split[0]);
@@ -278,7 +280,6 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         Integer endF = Integer.valueOf(split1[1]);
 
         if(startT >= startF && startT <= endF) return true;
-        if(endT >= startF && endT <= endF) return true;
-        return false;
+        return endT >= startF && endT <= endF;
     }
 }

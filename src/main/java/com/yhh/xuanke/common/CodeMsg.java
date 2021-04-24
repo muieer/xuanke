@@ -24,8 +24,8 @@ public enum CodeMsg {
 
 
 
-    private int code;
-    private String msg;
+    private final int code;
+    private final String msg;
 
     CodeMsg(int code, String msg) {
         this.code = code;

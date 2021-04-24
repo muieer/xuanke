@@ -47,7 +47,7 @@ public class ResultServiceImpl implements ResultService {
         ListDTO<ResultEntity> listDTO = (ListDTO<ResultEntity>) redisService.getFromHash("forResultList::" + sno, sno + "-" + pageNum);
 
         if (listDTO != null) {
-            LOGGER.info("从redis中加载选课结果");
+//            LOGGER.info("从redis中加载选课结果");
             return listDTO;
         }
 
@@ -81,7 +81,7 @@ public class ResultServiceImpl implements ResultService {
         Integer sno = StudentIDUtils.getStudentIDFromMap();
 
         //为啥突然拿不到授课编号了，头疼，头大，难顶
-        LOGGER.info("得到授课编号{}", pno);
+//        LOGGER.info("得到授课编号{}", pno);
         //原因：前端参数名称写错了，要仔细啊
 
         ResultEntity resultEntity = findResultEntityByPnoAndSno(pno, sno);
