@@ -39,7 +39,7 @@ public class StudentIDUtils {
 
 
     //存在多个学生同时选课，预先定义大小，以免扩容的时候带来性能开销
-    private static Map<String, Integer> map = new HashMap<>(1000);
+    private static final Map<String, Integer> map = new HashMap<>(1000);
 
     //subject有多个,对应多个用户
     public static void addStudentIDToMap(Integer sno) {

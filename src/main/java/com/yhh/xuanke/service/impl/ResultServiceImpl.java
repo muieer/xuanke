@@ -47,7 +47,7 @@ public class ResultServiceImpl implements ResultService {
         ListDTO<ResultEntity> listDTO = (ListDTO<ResultEntity>) redisService.getFromHash("forResultList::" + sno, sno + "-" + pageNum);
 
         if (listDTO != null) {
-            LOGGER.info("从redis中加载选课结果");
+//            LOGGER.info("从redis中加载选课结果");
             return listDTO;
         }
 
@@ -81,7 +81,7 @@ public class ResultServiceImpl implements ResultService {
         Integer sno = StudentIDUtils.getStudentIDFromMap();
 
         //为啥突然拿不到授课编号了，头疼，头大，难顶
-        LOGGER.info("得到授课编号{}", pno);
+//        LOGGER.info("得到授课编号{}", pno);
         //原因：前端参数名称写错了，要仔细啊
 
         ResultEntity resultEntity = findResultEntityByPnoAndSno(pno, sno);
@@ -102,7 +102,7 @@ public class ResultServiceImpl implements ResultService {
         redisService.hdecr("forPlan", String.valueOf(pno), -1);
 
         //删除选课记录中此条选课结果
-        redisService.delFromHash("forResult", sno+"-"+pno);
+        redisService.delFromHash("forResult" + "-" + sno, String.valueOf(pno));
 
         //选课内容发生变化，删除redis中旧有数据
         redisService.del("forResultList::" + sno);
@@ -116,12 +116,12 @@ public class ResultServiceImpl implements ResultService {
         ResultEntity entity ;
 
         //从redis中得到是否有对应选课记录
-        entity = (ResultEntity) redisService.getFromHash("forResult", sno+"-"+pno);
+        entity = (ResultEntity) redisService.getFromHash("forResult" + "-" + sno, String.valueOf(pno));
         if( entity!=null ) return entity;
 
         entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
         if(entity != null){
-            redisService.setToHash("forResult", sno+"-"+pno, entity, 30, TimeUnit.MINUTES);
+            redisService.setToHash("forResult" + "-" + sno, String.valueOf(pno), entity, 1, TimeUnit.DAYS);
         }
         return entity;
     }

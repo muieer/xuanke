@@ -95,4 +95,9 @@ public class RedisServiceImpl implements RedisService {
     public Long incr(String key, long delta) {
         return redisUtil.incr(key, delta);
     }
+
+    @Override
+    public Map<Object, Object> getAllFromHashByKey(String key) {
+        return redisUtil.hmget(key);
+    }
 }
