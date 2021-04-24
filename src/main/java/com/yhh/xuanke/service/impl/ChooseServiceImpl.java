@@ -32,10 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.Predicate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -160,6 +157,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         }
 
         //todo 待解决上课时间冲突问题
+        //2.判断是否重选
         Integer sno = StudentIDUtils.getStudentIDFromMap();
         // 先读取此节课的选课结果
         // 优先从redis中加载
@@ -168,8 +166,17 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
             throw new GlobalException(CodeMsg.CHOOSE_REPEAT);
         }
 
+        //3.判断是否时间冲突
+        Map<Object, Object> all = redisService.getAllFromHashByKey("forResult" + "-" + sno);
+        for(Object result: all.values()){
+            Integer pnoFrom = ((ResultEntity) result).getPno();
+            if(isTimeRepeat(pno, pnoFrom)){
+                throw new GlobalException(CodeMsg.TIME_HIT);
+            }
+        }
+
         //如果key不存在，会写入并返回-1,需先判断
-        if(!redisService.hasKey("forPlan")){
+        if(!redisService.hasKey("forPlanCount")){
             try {
                 //重新加载，防止键过期读错数据
                 afterPropertiesSet();
@@ -179,7 +186,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
             }
         }
 
-        Long num = redisService.hdecr("forPlan", String.valueOf(pno), 1);
+        Long num = redisService.hdecr("forPlanCount", String.valueOf(pno), 1);
         LOGGER.info("redis中读取pno={} 的授课计划余量为{}", pno, num);
         if(num < 0){
             //没余量，写入本地缓存中
@@ -213,7 +220,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
         //该条选课结果写入redis中
-        redisService.setToHash("forResult", sno+"-"+pno, entity, 30, TimeUnit.MINUTES);
+        redisService.setToHash("forResult" + "-" + sno, String.valueOf(pno), entity, 30, TimeUnit.MINUTES);
         //选课结果发生变化，删掉redis中旧数据
         redisService.del("forResultList::" + sno);
     }
@@ -226,8 +233,13 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         List<PlanEntity> list = planRepository.findAll();
 
         for(PlanEntity entity: list){
-            redisService.setToHash("forPlan", String.valueOf(entity.getPno()),
+            //授课计划余量
+            redisService.setToHash("forPlanCount", String.valueOf(entity.getPno()),
                     entity.getNum(), 1, TimeUnit.DAYS);
+
+            //授课计划上课时间
+            redisService.setToHash("forPlanTime", String.valueOf(entity.getPno()),
+                    entity.getStudytime(), 1, TimeUnit.DAYS);
         }
 
         //将选课开启结束时间主动加载进redis
@@ -237,10 +249,36 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         redisService.set("start", "time", entity.getStartTime(), 1, TimeUnit.DAYS);
         redisService.set("end", "time", entity.getEndTime(), 1, TimeUnit.DAYS);
 
+
+        //系统启动，将预选结果加载
+        List<ResultEntity> resultEntities = resultRepository.findAll();
+        for(ResultEntity result: resultEntities){
+            redisService.setToHash("forResult" + "-" +result.getSno(), "" + result.getPno(), result, 1, TimeUnit.DAYS);
+        }
     }
 
     //判断上课时间是否冲突
-   /* private boolean isTimeRepeat(Integer pno, Integer sno){
+    private boolean isTimeRepeat(Integer pnoTarget, Integer pnoFrom){
+        String targetTime = (String) redisService.getFromHash("forPlanTime", String.valueOf(pnoTarget));
+        String formTime = (String) redisService.getFromHash("forPlanTime", String.valueOf(pnoFrom));
 
-    }*/
+        String[] splitT = targetTime.split(",");
+        String[] splitF = formTime.split(",");
+
+        String tWeek = splitT[0];
+        String fWeek = splitF[0];
+        if(tWeek.equals(fWeek)) return true;
+
+        String[] split = splitT[1].split("-");
+        Integer startT = Integer.valueOf(split[0]);
+        Integer endT = Integer.valueOf(split[1]);
+
+        String[] split1 = splitF[1].split("-");
+        Integer startF = Integer.valueOf(split1[0]);
+        Integer endF = Integer.valueOf(split1[1]);
+
+        if(startT >= startF && startT <= endF) return true;
+        if(endT >= startF && endT <= endF) return true;
+        return false;
+    }
 }

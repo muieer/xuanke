@@ -1,5 +1,6 @@
 package com.yhh.xuanke.redis;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public interface RedisService {
@@ -30,4 +31,6 @@ public interface RedisService {
     void delFromSet(String key, Object value);
 
     Long incr(String key, long delta);
+
+    Map<Object, Object> getAllFromHashByKey(String key);
 }

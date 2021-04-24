@@ -8,6 +8,7 @@ public enum CodeMsg {
     PlAN_OVER(500214, "此课程已无余量"),
     CHOOSE_END(1, "提交成功，请到信息查询栏中的学生选课情况查询页面查看选课结果！选课结果以此为准！"),
     CHOOSE_REPEAT(-2, "重复选课！"),
+    TIME_HIT(-1, "上课时间冲突"),
 
     COUNT_OVER(-1, "频繁请求，请稍后再试！"),
     NO_PLAN(-1, "授课计划不存在！"),

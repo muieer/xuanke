@@ -102,7 +102,7 @@ public class ResultServiceImpl implements ResultService {
         redisService.hdecr("forPlan", String.valueOf(pno), -1);
 
         //删除选课记录中此条选课结果
-        redisService.delFromHash("forResult", sno+"-"+pno);
+        redisService.delFromHash("forResult" + "-" + sno, String.valueOf(pno));
 
         //选课内容发生变化，删除redis中旧有数据
         redisService.del("forResultList::" + sno);
@@ -116,12 +116,12 @@ public class ResultServiceImpl implements ResultService {
         ResultEntity entity ;
 
         //从redis中得到是否有对应选课记录
-        entity = (ResultEntity) redisService.getFromHash("forResult", sno+"-"+pno);
+        entity = (ResultEntity) redisService.getFromHash("forResult" + "-" + sno, String.valueOf(pno));
         if( entity!=null ) return entity;
 
         entity = resultRepository.findResultEntityByPnoAndSno(pno, sno);
         if(entity != null){
-            redisService.setToHash("forResult", sno+"-"+pno, entity, 30, TimeUnit.MINUTES);
+            redisService.setToHash("forResult" + "-" + sno, String.valueOf(pno), entity, 1, TimeUnit.DAYS);
         }
         return entity;
     }
