@@ -28,4 +28,6 @@ public interface RedisService {
     Boolean sHasKey(String key, Object value);
 
     void delFromSet(String key, Object value);
+
+    Long incr(String key, long delta);
 }

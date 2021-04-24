@@ -91,5 +91,8 @@ public class RedisServiceImpl implements RedisService {
         redisUtil.setRemove(key, value);
     }
 
-
+    @Override
+    public Long incr(String key, long delta) {
+        return redisUtil.incr(key, delta);
+    }
 }

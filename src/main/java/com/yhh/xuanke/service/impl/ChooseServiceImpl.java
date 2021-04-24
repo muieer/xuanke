@@ -99,6 +99,18 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
     @Override
     public ExposerDTO exposer(Integer pno) {
+        //IP限流
+        Integer sno = StudentIDUtils.getStudentIDFromMap();
+        Integer count = (Integer) redisService.get("ip-", String.valueOf(sno));
+        if (count == null) {
+            //一分钟内可以访问三次
+            redisService.set("ip-", String.valueOf(sno), 0, 1, TimeUnit.MINUTES);
+        }else if (count < 2){
+            redisService.incr("ip-"+sno, 1);
+        }else {
+            throw new GlobalException(CodeMsg.COUNT_OVER);
+        }
+
         //先判断是否有此课程
         Boolean flag = redisService.hHasKey("forPlan", String.valueOf(pno));
         //该课程不存在，

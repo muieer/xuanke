@@ -138,22 +138,22 @@
             let pno = getPno();
             if (confirm("是否确认选择此节课，请谨慎考虑！")) {
                 $.ajax({
-                    url: "/choose/exposer",
+                    url: "/choose/"+ pno +"/exposer",
                     type: "POST",
                     async: false,
-                    data: {
+                    /*data: {
                         pno: pno
-                    },
+                    },*/
                     success: function (dto) {
                         if(dto.success){
                             $.ajax({
-                                url: "/choose/confirm",
+                                url: "/choose/" + pno + "/" + dto.data + "/confirm",
                                 type: "POST",
                                 async: false,
-                                data: {
+                                /*data: {
                                     pno: pno,
-                                    md5: dto.data
-                                },
+                                    md5: dto.data,
+                                },*/
                                 success: function (dto) {
 
                                     if(dto.success){

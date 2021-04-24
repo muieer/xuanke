@@ -33,9 +33,9 @@ public class ChooseController {
         return "elective";
     }
 
-    @PostMapping("/exposer")
+    @PostMapping("/{pno}/exposer")
     @ResponseBody
-    private ResultDTO<String> exposer(@RequestParam(value = "pno")Integer pno){
+    private ResultDTO<String> exposer(@PathVariable(value = "pno")Integer pno){
 
         try{
             ExposerDTO exposer = chooseService.exposer(pno);
@@ -47,9 +47,9 @@ public class ChooseController {
     }
 
     //选课
-    @PostMapping("/confirm")
+    @PostMapping("/{pno}/{md5}/confirm")
     @ResponseBody
-    public ResultDTO<String> doChoose(@RequestParam(value = "pno")Integer pno, @RequestParam(value = "md5")String md5) {
+    public ResultDTO<String> doChoose(@PathVariable(value = "pno")Integer pno, @PathVariable(value = "md5")String md5) {
 
         try{
             return chooseService.doChoose(pno, md5);
