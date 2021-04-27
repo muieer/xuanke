@@ -132,7 +132,6 @@ CREATE TABLE `kaoshi` (
 
 LOCK TABLES `kaoshi` WRITE;
 /*!40000 ALTER TABLE `kaoshi` DISABLE KEYS */;
-INSERT INTO `kaoshi` VALUES (1,'A10002021','数据结构','杨虎虎','2021年6月23日(09:00-11:00)','6教北214','笔试',17,17052135),(2,'A20001172','离散数学','杨虎虎','2021年6月22日(09:00-11:00)','6教北314','笔试',27,17052135),(3,'A05008200','面向对象程序设计(Java)','杨虎虎','2021年6月27日(09:00-11:00)','12教314','笔试',7,17052135);
 /*!40000 ALTER TABLE `kaoshi` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,7 +222,7 @@ CREATE TABLE `student` (
 
 LOCK TABLES `student` WRITE;
 /*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` VALUES (17052135,'杨虎虎','男',17052135,'计算机学院','计算机科学与技术',2017,'21132a532f3d0c43be0e76b942d502a9','yhhbysl'),(17152135,'伲明','男',17051325,'计算机学院','软件工程',2017,'21132a532f3d0c43be0e76b942d502a9','yhhbysl'),(17252135,'楠楠','女',17053142,'管理学院','人力资源',2018,'21132a532f3d0c43be0e76b942d502a9','yhhbysl');
+INSERT INTO `student` VALUES (17152135,'伲明','男',17051325,'计算机学院','软件工程',2017,'21132a532f3d0c43be0e76b942d502a9','yhhbysl'),(17252135,'楠楠','女',17053142,'管理学院','人力资源',2018,'21132a532f3d0c43be0e76b942d502a9','yhhbysl');
 /*!40000 ALTER TABLE `student` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
