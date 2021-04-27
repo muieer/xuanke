@@ -99,7 +99,7 @@ public class ResultServiceImpl implements ResultService {
         }
 
         //redis中对应的课程余量加一
-        redisService.hdecr("forPlan", String.valueOf(pno), -1);
+        redisService.hdecr("forPlanCount", String.valueOf(pno), -1);
 
         //删除选课记录中此条选课结果
         redisService.delFromHash("forResult" + "-" + sno, String.valueOf(pno));
