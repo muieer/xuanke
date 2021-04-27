@@ -109,7 +109,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         }
 
         //先判断是否有此课程
-        Boolean flag = redisService.hHasKey("forPlan", String.valueOf(pno));
+        Boolean flag = redisService.hHasKey("forPlanCount", String.valueOf(pno));
         //该课程不存在，
         if(!flag) {
             throw new GlobalException(CodeMsg.NO_PLAN);
@@ -139,7 +139,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
     public ResultDTO<String> doChoose(Integer pno, String md5) {
 
         //0.先判断链接是否正确
-        if(md5==null || !md5.equals(MD5Util.inputPassToFormPass(String.valueOf(pno)))){
+        if(md5 == null || !md5.equals(MD5Util.inputPassToFormPass(String.valueOf(pno)))){
             throw new GlobalException(CodeMsg.LINK_ERROR);
         }
 
