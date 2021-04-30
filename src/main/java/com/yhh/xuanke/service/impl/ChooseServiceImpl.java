@@ -101,8 +101,8 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         Integer count = (Integer) redisService.get("ip-", String.valueOf(sno));
         if (count == null) {
             //一分钟内可以访问三次
-            redisService.set("ip-", String.valueOf(sno), 0, 1, TimeUnit.MINUTES);
-        }else if (count < 2){
+            redisService.set("ip-", String.valueOf(sno), 1, 1, TimeUnit.MINUTES);
+        }else if (count < 3){
             redisService.incr("ip-"+sno, 1);
         }else {
             throw new GlobalException(CodeMsg.COUNT_OVER);
