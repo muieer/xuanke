@@ -4,6 +4,8 @@
 
 本项目主要解决在高校选课场景下，保证选课系统在大量读写压力下不宕机，以及选课时尽可能提高选课QPS，给学生一个良好的选课体验，完成上述功能同时保证选课安全
 
+
+
 ## 运行效果图
 
 ![登陆](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.33.59.png)
@@ -18,6 +20,8 @@
 
 其他效果图请到image文件夹中查看
 
+
+
 ## 技术选型
 
 前端：Bootstrap、JQuery、Thymeleaf
@@ -27,6 +31,8 @@
 中间件：Redis、RabbitMQ、Druid
 
 数据库：MySQL
+
+
 
 ## 优化思路
 
@@ -144,3 +150,60 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
  **安全相关：** 存储在数据库中的密码和选课链接都经过了MD5加密，对应MD5值的生成经过了两次加盐
 
  **数据库操作：** 引入Druid数据库连接池，提升对数据库的操作性能
+
+
+
+## 压力测试
+
+ 测试内容：选课QPS
+
+ 测试技术：Jmeter
+
+ 测试计划：理想状态下（余量充足，不存在重复选课，上课时间不冲突等），同时执行5000个线程（模仿5000个同学），选同一节课，看选课执行情况
+
+ 测试方案：
+
+1. 利用mysql存储过程生成5000个学生学号，并将数据导出为cvs格式，供Jmeter使用
+
+```mysql
+delimiter //
+create procedure createSno ()
+begin
+    declare i int;
+    set i = 1;
+    while i <= 5000 do
+        insert into testData values(i);
+        set i = i + 1;
+    end while;
+end //
+delimiter ;
+
+call createSno();
+```
+
+2. 使用Jmeter图形化界面生成测试方案，验证测试方案可行性
+
+![gui test](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.13.32.png)
+
+3. 使用Jmeter命令行压测（图形化界面仅用来做验证，并不适合高负载压测），执行5次，查看结果
+
+```
+jmeter -n -t [xuanke.jmx,测试文件] -l [xuanke.txt,结果输出] -e -o [/test,web输出]
+```
+
+![result](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.09.01.png)
+
+### 未优化前压测结果
+
+QPS最大为：835，执行成功率为100%，但是在连续多组测试过程中，会出现执行失败情况，第五组压测失败率高达71.66%，失败结果多与tcp传输相关
+
+![failure](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.04.19.png)
+
+### 优化后压测结果
+
+
+
+**补充：**为方便压测，对原先代码有做修改，以方便测试
+
+
+
