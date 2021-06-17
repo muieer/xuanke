@@ -138,7 +138,7 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
     @Override
     public ResultDTO<String> doChoose(Integer pno, String md5) {
 
-        //0.先判断链接是否正确
+        //判断链接是否正确
         if(md5 == null || !md5.equals(MD5Util.inputPassToFormPass(String.valueOf(pno)))){
             throw new GlobalException(CodeMsg.LINK_ERROR);
         }
@@ -222,7 +222,8 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         Preconditions.checkArgument(a != 0, "此节课已经没有剩余数量可选！");
 
         //该条选课结果写入redis中
-        redisService.setToHash("forResult" + "-" + sno, String.valueOf(pno), entity, 30, TimeUnit.MINUTES);
+        redisService.setToHash("forResult" + "-" + sno, String.valueOf(pno), entity, 30,
+                TimeUnit.MINUTES);
         //选课结果发生变化，删掉redis中旧数据
         redisService.del("forResultList::" + sno);
     }
@@ -255,7 +256,8 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
         //系统启动，将预选结果加载
         List<ResultEntity> resultEntities = resultRepository.findAll();
         for(ResultEntity result: resultEntities){
-            redisService.setToHash("forResult" + "-" +result.getSno(), "" + result.getPno(), result, 1, TimeUnit.DAYS);
+            redisService.setToHash("forResult" + "-" +result.getSno(),
+                    "" + result.getPno(), result, 1, TimeUnit.DAYS);
         }
     }
 

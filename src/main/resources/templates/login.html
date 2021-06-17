@@ -109,6 +109,7 @@
             // contentType:"application/json",
             success: function (data) {
                 if (data === "success") {
+                    alert("登陆成功，将会跳转到首页！");
                     window.location.href = "/index";
                 } else {
                     layer.closeAll();

@@ -22,6 +22,7 @@ public class MQSender {
         CorrelationData correlationData = new CorrelationData(UUIDUtil.uuid());
         LOGGER.info("生产者发送消息 {}", msg);
 
-        rabbitTemplate.convertAndSend("amq.direct", "choosePlan_routingKey", msg, correlationData);
+        rabbitTemplate.convertAndSend("amq.direct", "choosePlan_routingKey",
+                msg, correlationData);
     }
 }

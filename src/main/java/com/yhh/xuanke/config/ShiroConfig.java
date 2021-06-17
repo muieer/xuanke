@@ -19,15 +19,6 @@ public class ShiroConfig {
 
         ShiroFilterFactoryBean bean = new ShiroFilterFactoryBean();
         bean.setSecurityManager(defaultWebSecurityManager);
-        // 添加内置过滤器
-        /*
-         * * 常见过滤器：
-         * anon：无需认证（登录）可以访问
-         * authc：必须认证才可以访问
-         * user:如果使用Remember Me的功能，可以直接访问
-         * perms:该资源必须得到资源权限才可以访问
-         * role:该资源必须得到角色权限才可以访问
-         */
         Map<String, String> filterMap = new LinkedHashMap<>();
         //无需权限，登录页面和登录请求无需拦截
         //发送登陆请求

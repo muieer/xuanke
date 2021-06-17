@@ -141,19 +141,12 @@
                     url: "/choose/"+ pno +"/exposer",
                     type: "POST",
                     async: false,
-                    /*data: {
-                        pno: pno
-                    },*/
                     success: function (dto) {
                         if(dto.success){
                             $.ajax({
                                 url: "/choose/" + pno + "/" + dto.data + "/confirm",
                                 type: "POST",
                                 async: false,
-                                /*data: {
-                                    pno: pno,
-                                    md5: dto.data,
-                                },*/
                                 success: function (dto) {
 
                                     if(dto.success){
@@ -171,7 +164,6 @@
                         }
                     },
                 })
-
             } else {
                 //刷新，得到最新的课程余量
                 // location.reload();

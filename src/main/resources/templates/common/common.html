@@ -66,7 +66,7 @@
                     </ul>
                 </nav>
                 <div class="sidebar-footer">
-                    <p class="copyright text-center">Copyright © 2021 杭州电子科技大学计算机学院 17052135-杨虎虎 All Rights Reserved</p>
+                    <p class="copyright text-center">Copyright © 2021 杭州电子科技大学计算机学院 牧一尔 All Rights Reserved</p>
                 </div>
 
             </div>
@@ -99,7 +99,8 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li class="divider"></li>
-                                <li><a th:href="@{/logout}"><i class="mdi mdi-logout-variant"></i> 退出登录</a></li>
+<!--                                <li><a th:href="@{/logout}"><i class="mdi mdi-logout-variant"></i> 退出登录</a></li>-->
+                                <li><a onclick="out()"><i class="mdi mdi-logout-variant"></i> 退出登录</a></li>
                             </ul>
                         </li>
                         <!--切换主题配色-->
@@ -224,8 +225,13 @@
         }
 
         function warningForElective() {
-            alert("请注意：选修课课程余量显示存在1分钟延迟，具体选课结果以【学生选课情况查询】显示为准！");
+            // alert("请注意：选修课课程余量显示存在1分钟延迟，具体选课结果以【学生选课情况查询】显示为准！");
             location.href = "/choose/elective/list"
+        }
+
+        function out(){
+            alert("退出登陆成功，将会跳转到登陆页面！");
+            window.location.href = "/logout";
         }
     </script>
     <th:block th:replace="${scripts}"/>
