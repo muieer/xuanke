@@ -159,6 +159,8 @@ public class ChooseServiceImpl implements ChooseService, InitializingBean {
 
  测试技术：Jmeter
 
+ 测试环境：MacBook Pro2018，JDK1.8,Jmeter 5.3
+
  测试计划：理想状态下（余量充足，不存在重复选课，上课时间不冲突等），同时执行5000个线程（模仿5000个同学），选同一节课，看选课执行情况
 
  测试方案：
@@ -193,17 +195,12 @@ jmeter -n -t [xuanke.jmx,测试文件] -l [xuanke.txt,结果输出] -e -o [/test
 
 ![result](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.09.01.png)
 
-### 未优化前压测结果
+### 压测结果说明
 
-QPS最大为：835，执行成功率为100%，但是在连续多组测试过程中，会出现执行失败情况，第五组压测失败率高达71.66%，失败结果多与tcp传输相关
+ 多次压测后得出来的平均选课qps为500出头，读页面的平均选课qps为900多
+ 
+ 备注：为了简化测试，测试时修改了部分代码，主要是去除url校验和写死pno
 
-![failure](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.04.19.png)
-
-### 优化后压测结果
-
-
-
-**补充：**为方便压测，对原先代码有做修改，以方便测试
 
 
 
