@@ -32,7 +32,8 @@ public class RabbitMQConfig {
         //开启returncallback yml 需要配置publisher-returns
         rabbitTemplate.setReturnCallback((message,  replyCode, replyText, exchange, routingKey)->{
             String correlationId = message.getMessageProperties().getCorrelationId();
-            LOGGER.info("消息：{} 发送失败, 应答码：{} 原因：{} 交换机: {}  路由键: {}", correlationId, replyCode, replyText, exchange, routingKey);
+            LOGGER.info("消息：{} 发送失败, 应答码：{} 原因：{} 交换机: {}  路由键: {}",
+                    correlationId, replyCode, replyText, exchange, routingKey);
         });
 
         //开启消息确认 yml 需要配置 publisher-confirm
