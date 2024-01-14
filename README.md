@@ -8,15 +8,15 @@
 
 ## 运行效果图
 
-![登陆](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.33.59.png)
+![](image/img1.png)
 
-![首页](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.35.09.png)
+![](image/img2.png)
 
-![列表](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.35.58.png)
+![](image/img3.png)
 
-![选课](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.45.02.png)
+![](image/img4.png)
 
-![退课](https://gitee.com/muieer/xuanke/raw/temp/image/%E6%88%AA%E5%B1%8F2021-04-27%2022.45.17.png)
+![](image/img5.png)
 
 其他效果图请到image文件夹中查看
 
@@ -185,7 +185,7 @@ call createSno();
 
 2. 使用Jmeter图形化界面生成测试方案，验证测试方案可行性
 
-![gui test](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.13.32.png)
+![](image/jmeter/img1.png)
 
 3. 使用Jmeter命令行压测（图形化界面仅用来做验证，并不适合高负载压测），执行5次，查看结果
 
@@ -193,7 +193,7 @@ call createSno();
 jmeter -n -t [xuanke.jmx,测试文件] -l [xuanke.txt,结果输出] -e -o [/test,web输出]
 ```
 
-![result](https://gitee.com/muieer/xuanke/raw/temp/image/jmeter/%E6%88%AA%E5%B1%8F2021-05-07%2020.09.01.png)
+![](image/jmeter/img2.png)
 
 ### 压测结果说明
 
